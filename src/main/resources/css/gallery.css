@@ -1,0 +1,94 @@
+/* ===== 拾光廊图库样式 ===== */
+
+/* 主容器 */
+.gallery-view {
+    -fx-background-color: -bg-primary;
+}
+
+/* ========== 图片网格 ========== */
+.gallery-image-grid {
+    -fx-hgap: 16;
+    -fx-vgap: 16;
+}
+
+/* 图片卡片 */
+.gallery-image-card {
+    -fx-background-color: -bg-card;
+    -fx-background-radius: -radius-lg;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.04), 2, 0, 0, 1);
+    -fx-border-color: -border-light;
+    -fx-border-width: 0.5px;
+    -fx-cursor: hand;
+    -fx-min-width: 200;
+    -fx-pref-width: 200;
+}
+.gallery-image-card:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 12, 0, 0, 4);
+    -fx-translate-y: -4;
+}
+
+.gallery-card-image {
+    -fx-fit-width: 200;
+    -fx-fit-height: 160;
+    -fx-preserve-ratio: false;
+}
+
+.gallery-card-info {
+    -fx-padding: 10 12;
+    -fx-spacing: 2;
+}
+
+.gallery-card-title {
+    -fx-font-size: 13px;
+    -fx-text-fill: -text-primary;
+    -fx-font-weight: 500;
+}
+
+.gallery-card-category {
+    -fx-font-size: 11px;
+    -fx-text-fill: -text-tertiary;
+}
+
+/* ========== 收藏图标 ========== */
+.gallery-fav-icon {
+    -fx-font-size: 18px;
+    -fx-text-fill: -primary;
+    -fx-cursor: hand;
+}
+
+/* ========== 详情弹窗 ========== */
+.gallery-detail-dialog {
+    -fx-background-color: -bg-card;
+    -fx-background-radius: -radius-lg;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 20, 0, 0, 8);
+}
+
+.gallery-close-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: -text-tertiary;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-background-radius: 50%;
+    -fx-min-width: 32;
+    -fx-min-height: 32;
+}
+.gallery-close-btn:hover {
+    -fx-background-color: -bg-hover;
+    -fx-text-fill: -text-primary;
+}
+
+.gallery-detail-image {
+    -fx-background-radius: -radius-md;
+}
+
+.gallery-detail-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: 700;
+    -fx-text-fill: -text-primary;
+}
+
+.gallery-detail-info {
+    -fx-font-size: 13px;
+    -fx-text-fill: -text-secondary;
+}

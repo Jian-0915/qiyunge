@@ -1,0 +1,89 @@
+/* ============================================================
+   栖云阁 - 人脸识别对话框样式
+   ============================================================ */
+
+.face-dialog-root {
+    -fx-background-color: #0C121C;
+    -fx-border-color: rgba(216, 179, 106, 0.24);
+    -fx-border-radius: 12px;
+    -fx-border-width: 1px;
+    -fx-background-radius: 12px;
+}
+
+.face-dialog-title {
+    -fx-text-fill: rgba(248, 250, 252, 0.96);
+    -fx-font-size: 20px;
+    -fx-font-weight: 700;
+}
+
+.camera-view {
+    -fx-background-color: rgba(20, 42, 49, 0.54);
+    -fx-background-radius: 10px;
+    -fx-border-color: rgba(216, 179, 106, 0.24);
+    -fx-border-radius: 10px;
+    -fx-border-width: 1px;
+}
+
+.face-status-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #5B8DEF;
+}
+
+.face-hint-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: #999999;
+}
+
+.face-progress {
+    -fx-accent: #2F8F5B;
+    -fx-background-color: rgba(255,255,255,0.08);
+    -fx-background-radius: 6px;
+    -fx-pref-height: 8px;
+}
+
+.face-progress .track {
+    -fx-background-color: rgba(255,255,255,0.08);
+    -fx-background-radius: 6px;
+}
+
+.face-progress .bar {
+    -fx-background-color: #2F8F5B;
+    -fx-background-radius: 6px;
+}
+
+.face-primary-button {
+    -fx-background-color: #2F8F5B;
+    -fx-text-fill: white;
+    -fx-background-radius: 10px;
+    -fx-padding: 10px 32px;
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.10), 8, 0, 0, 2);
+}
+
+.face-primary-button:hover {
+    -fx-background-color: #287D50;
+}
+
+.face-primary-button:disabled {
+    -fx-background-color: rgba(47, 143, 91, 0.5);
+    -fx-cursor: default;
+}
+
+.face-secondary-button {
+    -fx-background-color: rgba(255,255,255,0.06);
+    -fx-text-fill: rgba(248, 250, 252, 0.72);
+    -fx-background-radius: 10px;
+    -fx-padding: 10px 32px;
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+    -fx-cursor: hand;
+    -fx-border-color: rgba(255,255,255,0.1);
+    -fx-border-radius: 10px;
+}
+
+.face-secondary-button:hover {
+    -fx-background-color: rgba(255,255,255,0.12);
+}

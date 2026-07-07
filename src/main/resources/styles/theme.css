@@ -1,0 +1,298 @@
+/* ============================================================
+   栖云阁 - 主题系统
+   QiyunGe Theme System
+   ============================================================ */
+
+/* --- 全局基础样式 --- */
+.root {
+    -fx-font-family: "Microsoft YaHei UI", "Segoe UI", sans-serif;
+    -fx-font-size: 14px;
+    -fx-background-color: #F6F7FB;
+    -fx-text-fill: #111827;
+    /* 默认主题变量（晨雾主题值，会被 .morning 等覆盖） */
+    -bg-primary: #F6F7FB;
+    -bg-secondary: #FFFFFF;
+    -bg-tertiary: #EEF0F5;
+    -bg-hover: #E8EAF0;
+    -bg-nav: #FAFBFE;
+    -bg-card: #FFFFFF;
+    -bg-input: #F0F2F7;
+    -bg-topbar: rgba(246, 247, 251, 0.95);
+    -bg-player: rgba(255, 255, 255, 0.98);
+    -primary: #5B8DEF;
+    -primary-hover: #4A7DE0;
+    -primary-light: rgba(91, 141, 239, 0.1);
+    -primary-text: #FFFFFF;
+    -accent: #14B8A6;
+    -accent-hover: #0D9488;
+    -accent-light: rgba(20, 184, 166, 0.1);
+    -text-primary: #111827;
+    -text-secondary: #6B7280;
+    -text-tertiary: #9CA3AF;
+    -text-on-primary: #FFFFFF;
+    -border: #E5E7EB;
+    -border-light: #F0F2F7;
+    -danger: #EF4444;
+    -danger-hover: #DC2626;
+    -danger-light: rgba(239, 68, 68, 0.1);
+    -warning: #F59E0B;
+    -warning-light: rgba(245, 158, 11, 0.1);
+    -success: #10B981;
+    -success-light: rgba(16, 185, 129, 0.1);
+    -radius-sm: 6px;
+    -radius-md: 10px;
+    -radius-lg: 16px;
+    -radius-xl: 24px;
+    -transition-fast: 150ms;
+    -transition-normal: 250ms;
+    -transition-slow: 400ms;
+}
+
+/* --- 晨雾主题 (默认) --- */
+.morning {
+    -bg-primary: #F6F7FB;
+    -bg-secondary: #FFFFFF;
+    -bg-tertiary: #EEF0F5;
+    -bg-hover: #E8EAF0;
+    -bg-nav: #FAFBFE;
+    -bg-card: #FFFFFF;
+    -bg-input: #F0F2F7;
+    -bg-topbar: rgba(246, 247, 251, 0.95);
+    -bg-player: rgba(255, 255, 255, 0.98);
+
+    -primary: #5B8DEF;
+    -primary-hover: #4A7DE0;
+    -primary-light: rgba(91, 141, 239, 0.1);
+    -primary-text: #FFFFFF;
+
+    -accent: #14B8A6;
+    -accent-hover: #0D9488;
+    -accent-light: rgba(20, 184, 166, 0.1);
+
+    -text-primary: #111827;
+    -text-secondary: #6B7280;
+    -text-tertiary: #9CA3AF;
+    -text-on-primary: #FFFFFF;
+
+    -border: #E5E7EB;
+    -border-light: #F0F2F7;
+
+    -danger: #EF4444;
+    -danger-hover: #DC2626;
+    -danger-light: rgba(239, 68, 68, 0.1);
+
+    -warning: #F59E0B;
+    -warning-light: rgba(245, 158, 11, 0.1);
+
+    -success: #10B981;
+    -success-light: rgba(16, 185, 129, 0.1);
+
+    /* Shadow values - used inline in components.css */
+    /* -shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04); */
+    /* -shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06); */
+    /* -shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.08); */
+
+    -radius-sm: 6px;
+    -radius-md: 10px;
+    -radius-lg: 16px;
+    -radius-xl: 24px;
+
+    -transition-fast: 150ms;
+    -transition-normal: 250ms;
+    -transition-slow: 400ms;
+}
+
+/* --- 松林主题 --- */
+.forest {
+    -bg-primary: #F0F5F0;
+    -bg-secondary: #FFFFFF;
+    -bg-tertiary: #E5EDE5;
+    -bg-hover: #DDE8DD;
+    -bg-nav: #F5FAF5;
+    -bg-card: #FFFFFF;
+    -bg-input: #EAF2EA;
+    -bg-topbar: rgba(240, 245, 240, 0.95);
+    -bg-player: rgba(255, 255, 255, 0.98);
+
+    -primary: #2D8B56;
+    -primary-hover: #247A48;
+    -primary-light: rgba(45, 139, 86, 0.1);
+    -primary-text: #FFFFFF;
+
+    -accent: #5B8DEF;
+    -accent-hover: #4A7DE0;
+    -accent-light: rgba(91, 141, 239, 0.1);
+
+    -text-primary: #1A2E1A;
+    -text-secondary: #5A6B5A;
+    -text-tertiary: #8A9A8A;
+    -text-on-primary: #FFFFFF;
+
+    -border: #C8D8C8;
+    -border-light: #E5EDE5;
+
+    -danger: #EF4444;
+    -danger-hover: #DC2626;
+    -danger-light: rgba(239, 68, 68, 0.1);
+
+    -warning: #F59E0B;
+    -warning-light: rgba(245, 158, 11, 0.1);
+
+    -success: #10B981;
+    -success-light: rgba(16, 185, 129, 0.1);
+
+    /* Shadow values - used inline in components.css */
+    /* -shadow-sm: 0 1px 2px rgba(0, 40, 0, 0.04); */
+    /* -shadow-md: 0 4px 12px rgba(0, 40, 0, 0.06); */
+    /* -shadow-lg: 0 8px 24px rgba(0, 40, 0, 0.08); */
+
+    -radius-sm: 6px;
+    -radius-md: 10px;
+    -radius-lg: 16px;
+    -radius-xl: 24px;
+
+    -transition-fast: 150ms;
+    -transition-normal: 250ms;
+    -transition-slow: 400ms;
+}
+
+/* --- 暮色主题 --- */
+.dusk {
+    -bg-primary: #1E1B2E;
+    -bg-secondary: #2A2640;
+    -bg-tertiary: #352F4F;
+    -bg-hover: #3D365A;
+    -bg-nav: #242038;
+    -bg-card: #2A2640;
+    -bg-input: #352F4F;
+    -bg-topbar: rgba(30, 27, 46, 0.95);
+    -bg-player: rgba(42, 38, 64, 0.98);
+
+    -primary: #A78BFA;
+    -primary-hover: #8B5CF6;
+    -primary-light: rgba(167, 139, 250, 0.15);
+    -primary-text: #FFFFFF;
+
+    -accent: #F59E0B;
+    -accent-hover: #D97706;
+    -accent-light: rgba(245, 158, 11, 0.15);
+
+    -text-primary: #F1F0F5;
+    -text-secondary: #A5A0B8;
+    -text-tertiary: #7A7490;
+    -text-on-primary: #FFFFFF;
+
+    -border: #3D365A;
+    -border-light: #352F4F;
+
+    -danger: #F87171;
+    -danger-hover: #EF4444;
+    -danger-light: rgba(248, 113, 113, 0.15);
+
+    -warning: #FBBF24;
+    -warning-light: rgba(251, 191, 36, 0.15);
+
+    -success: #34D399;
+    -success-light: rgba(52, 211, 153, 0.15);
+
+    /* Shadow values - used inline in components.css */
+    /* -shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2); */
+    /* -shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3); */
+    /* -shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.4); */
+
+    -radius-sm: 6px;
+    -radius-md: 10px;
+    -radius-lg: 16px;
+    -radius-xl: 24px;
+
+    -transition-fast: 150ms;
+    -transition-normal: 250ms;
+    -transition-slow: 400ms;
+}
+
+/* --- 月白主题 --- */
+.moon {
+    -bg-primary: #F8F9FC;
+    -bg-secondary: #FFFFFF;
+    -bg-tertiary: #EFF1F7;
+    -bg-hover: #E6E9F2;
+    -bg-nav: #FAFBFE;
+    -bg-card: #FFFFFF;
+    -bg-input: #EEF0F7;
+    -bg-topbar: rgba(248, 249, 252, 0.95);
+    -bg-player: rgba(255, 255, 255, 0.98);
+
+    -primary: #6366F1;
+    -primary-hover: #4F46E5;
+    -primary-light: rgba(99, 102, 241, 0.1);
+    -primary-text: #FFFFFF;
+
+    -accent: #EC4899;
+    -accent-hover: #DB2777;
+    -accent-light: rgba(236, 72, 153, 0.1);
+
+    -text-primary: #0F172A;
+    -text-secondary: #64748B;
+    -text-tertiary: #94A3B8;
+    -text-on-primary: #FFFFFF;
+
+    -border: #E2E8F0;
+    -border-light: #EFF1F7;
+
+    -danger: #EF4444;
+    -danger-hover: #DC2626;
+    -danger-light: rgba(239, 68, 68, 0.1);
+
+    -warning: #F59E0B;
+    -warning-light: rgba(245, 158, 11, 0.1);
+
+    -success: #10B981;
+    -success-light: rgba(16, 185, 129, 0.1);
+
+    /* Shadow values - used inline in components.css */
+    /* -shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04); */
+    /* -shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06); */
+    /* -shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.08); */
+
+    -radius-sm: 6px;
+    -radius-md: 10px;
+    -radius-lg: 16px;
+    -radius-xl: 24px;
+
+    -transition-fast: 150ms;
+    -transition-normal: 250ms;
+    -transition-slow: 400ms;
+}
+
+/* --- 全局滚动条 --- */
+.scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 6px;
+}
+.scroll-bar:vertical .thumb {
+    -fx-background-color: -text-tertiary;
+    -fx-background-radius: 3px;
+}
+.scroll-bar:vertical .thumb:hover {
+    -fx-background-color: -text-secondary;
+}
+.scroll-bar:horizontal {
+    -fx-background-color: transparent;
+    -fx-pref-height: 6px;
+}
+.scroll-bar:horizontal .thumb {
+    -fx-background-color: -text-tertiary;
+    -fx-background-radius: 3px;
+}
+
+/* --- 全局 Tooltip --- */
+.tooltip {
+    -fx-background-color: -bg-card;
+    -fx-text-fill: -text-primary;
+    -fx-border-color: -border;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-font-size: 12px;
+    -fx-padding: 4px 8px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.04), 2, 0, 0, 1);
+}

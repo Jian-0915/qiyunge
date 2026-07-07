@@ -1,0 +1,712 @@
+/* ============================================================
+   栖云阁 - 通用组件样式
+   QiyunGe Components CSS
+   ============================================================ */
+
+/* --- 窗口标题栏 --- */
+.window-title-bar {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+.window-title-bar:hover {
+    -fx-background-color: -bg-hover;
+}
+.win-btn {
+    -fx-pref-width: 36px;
+    -fx-pref-height: 36px;
+    -fx-alignment: center;
+    -fx-text-fill: -text-tertiary;
+    -fx-font-size: 12px;
+    -fx-cursor: hand;
+    -fx-background-color: transparent;
+    -fx-background-radius: 6px;
+}
+.win-btn:hover {
+    -fx-background-color: -bg-tertiary;
+    -fx-text-fill: -text-primary;
+}
+.win-btn-close:hover {
+    -fx-background-color: #e81123;
+    -fx-text-fill: white;
+}
+
+/* --- 按钮 --- */
+.app-button {
+    -fx-background-color: -primary;
+    -fx-text-fill: -primary-text;
+    -fx-background-radius: 10px;
+    -fx-padding: 8px 20px;
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+    -fx-cursor: hand;
+    -fx-border-width: 0;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.04), 2, 0, 0, 1);
+}
+.app-button:hover {
+    -fx-background-color: -primary-hover;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 12, 0, 0, 4);
+}
+.app-button:pressed {
+    -fx-scale-y: 0.97;
+    -fx-scale-x: 0.97;
+}
+
+.app-button.secondary {
+    -fx-background-color: -bg-tertiary;
+    -fx-text-fill: -text-primary;
+}
+.app-button.secondary:hover {
+    -fx-background-color: -bg-hover;
+}
+
+.app-button.danger {
+    -fx-background-color: -danger;
+    -fx-text-fill: #FFFFFF;
+}
+.app-button.danger:hover {
+    -fx-background-color: -danger-hover;
+}
+
+.app-button.outline {
+    -fx-background-color: transparent;
+    -fx-text-fill: -primary;
+    -fx-border-color: -primary;
+    -fx-border-width: 1.5px;
+    -fx-border-radius: 10px;
+}
+.app-button.outline:hover {
+    -fx-background-color: -primary-light;
+}
+
+.app-button.ghost {
+    -fx-background-color: transparent;
+    -fx-text-fill: -text-secondary;
+}
+.app-button.ghost:hover {
+    -fx-background-color: -bg-hover;
+    -fx-text-fill: -text-primary;
+}
+
+/* --- 图标按钮 --- */
+.icon-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 10px;
+    -fx-padding: 8px;
+    -fx-cursor: hand;
+    -fx-border-width: 0;
+    -fx-text-fill: -text-secondary;
+}
+.icon-button:hover {
+    -fx-background-color: -bg-hover;
+    -fx-text-fill: -text-primary;
+}
+
+/* --- 搜索框 --- */
+.search-box {
+    -fx-background-color: -bg-input;
+    -fx-background-radius: 24px;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-padding: 8px 16px;
+    -fx-font-size: 13px;
+    -fx-text-fill: -text-primary;
+    -fx-prompt-text-fill: -text-tertiary;
+}
+.search-box:focused {
+    -fx-border-color: -primary;
+    -fx-border-width: 1.5px;
+    -fx-background-color: -bg-secondary;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.04), 2, 0, 0, 1);
+}
+
+/* --- 输入框通用 --- */
+.app-text-field {
+    -fx-background-color: -bg-input;
+    -fx-background-radius: 10px;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-padding: 10px 14px;
+    -fx-font-size: 14px;
+    -fx-text-fill: -text-primary;
+    -fx-prompt-text-fill: -text-tertiary;
+}
+.app-text-field:focused {
+    -fx-border-color: -primary;
+    -fx-border-width: 1.5px;
+    -fx-background-color: -bg-secondary;
+}
+
+.app-password-field {
+    -fx-background-color: -bg-input;
+    -fx-background-radius: 10px;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-padding: 10px 14px;
+    -fx-font-size: 14px;
+    -fx-text-fill: -text-primary;
+}
+.app-password-field:focused {
+    -fx-border-color: -primary;
+    -fx-border-width: 1.5px;
+    -fx-background-color: -bg-secondary;
+}
+
+/* --- 页面标题 --- */
+.page-header {
+    -fx-padding: 0 0 16px 0;
+}
+.page-header .title {
+    -fx-font-size: 22px;
+    -fx-font-weight: 700;
+    -fx-text-fill: -text-primary;
+}
+.page-header .subtitle {
+    -fx-font-size: 13px;
+    -fx-text-fill: -text-secondary;
+}
+
+/* --- 统计卡片 --- */
+.stat-card {
+    -fx-background-color: -bg-card;
+    -fx-background-radius: 16px;
+    -fx-padding: 20px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.04), 2, 0, 0, 1);
+    -fx-border-color: -border-light;
+    -fx-border-width: 0.5px;
+}
+.stat-card:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 12, 0, 0, 4);
+}
+.stat-card .stat-value {
+    -fx-font-size: 28px;
+    -fx-font-weight: 700;
+    -fx-text-fill: -text-primary;
+}
+.stat-card .stat-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: -text-secondary;
+}
+.stat-card .stat-icon {
+    -fx-font-size: 20px;
+    -fx-text-fill: -primary;
+}
+
+/* --- 状态标签 --- */
+.status-badge {
+    -fx-background-radius: 24px;
+    -fx-padding: 3px 10px;
+    -fx-font-size: 11px;
+    -fx-font-weight: 600;
+}
+.status-badge.active {
+    -fx-background-color: -success-light;
+    -fx-text-fill: -success;
+}
+.status-badge.disabled {
+    -fx-background-color: -bg-tertiary;
+    -fx-text-fill: -text-tertiary;
+}
+.status-badge.admin {
+    -fx-background-color: -primary-light;
+    -fx-text-fill: -primary;
+}
+.status-badge.pending {
+    -fx-background-color: -warning-light;
+    -fx-text-fill: -warning;
+}
+
+/* --- 数据表格 --- */
+.app-table-view {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.04), 2, 0, 0, 1);
+    -fx-background-radius: 16px;
+}
+.app-table-view .column-header-background {
+    -fx-background-color: -bg-tertiary;
+}
+.app-table-view .column-header {
+    -fx-background-color: -bg-tertiary;
+    -fx-border-color: -border-light;
+    -fx-text-fill: -text-secondary;
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+    -fx-padding: 10px 14px;
+}
+.app-table-view .column-header .label {
+    -fx-text-fill: -text-secondary;
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+}
+.app-table-view .filler {
+    -fx-background-color: -bg-tertiary;
+}
+.app-table-view .table-cell {
+    -fx-border-color: -border-light;
+    -fx-text-fill: -text-primary;
+    -fx-padding: 10px 14px;
+    -fx-font-size: 13px;
+    -fx-text-overrun: ellipsis;
+}
+.app-table-view .table-row-cell {
+    -fx-background-color: -bg-card;
+    -fx-border-color: -border-light;
+}
+.app-table-view .table-row-cell:hover {
+    -fx-background-color: -bg-hover;
+}
+.app-table-view .table-row-cell:selected {
+    -fx-background-color: -primary-light;
+    -fx-text-fill: -primary;
+}
+.app-table-view .placeholder .label {
+    -fx-text-fill: -text-tertiary;
+}
+
+/* --- 空状态 --- */
+.empty-state {
+    -fx-alignment: center;
+    -fx-padding: 60px 20px;
+}
+.empty-state .empty-icon {
+    -fx-font-size: 48px;
+    -fx-text-fill: -text-tertiary;
+    -fx-opacity: 0.5;
+}
+.empty-state .empty-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: 600;
+    -fx-text-fill: -text-secondary;
+}
+.empty-state .empty-message {
+    -fx-font-size: 13px;
+    -fx-text-fill: -text-tertiary;
+}
+
+/* --- Toast 通知 --- */
+.toast {
+    -fx-background-color: -bg-card;
+    -fx-background-radius: 10px;
+    -fx-padding: 12px 20px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 24, 0, 0, 8);
+    -fx-border-color: -border-light;
+    -fx-border-width: 0.5px;
+}
+.toast.success {
+    -fx-border-color: -success;
+}
+.toast.error {
+    -fx-border-color: -danger;
+}
+.toast.warning {
+    -fx-border-color: -warning;
+}
+
+/* --- 确认对话框 --- */
+.app-dialog {
+    -fx-background-color: -bg-card;
+    -fx-background-radius: 16px;
+}
+
+/* --- 侧边导航项 --- */
+.side-nav-item {
+    -fx-background-color: transparent;
+    -fx-background-radius: 10px;
+    -fx-padding: 10px 16px;
+    -fx-cursor: hand;
+    -fx-border-width: 0;
+    -fx-alignment: center-left;
+}
+.side-nav-item:hover {
+    -fx-background-color: -bg-hover;
+}
+.side-nav-item.active {
+    -fx-background-color: -primary-light;
+}
+.side-nav-item.active .nav-label {
+    -fx-text-fill: -primary;
+    -fx-font-weight: 600;
+}
+.side-nav-item .nav-icon {
+    -fx-font-size: 18px;
+    -fx-text-fill: -text-secondary;
+}
+.side-nav-item.active .nav-icon {
+    -fx-text-fill: -primary;
+}
+.side-nav-item .nav-label {
+    -fx-font-size: 13px;
+    -fx-text-fill: -text-secondary;
+}
+
+/* --- 顶部栏 --- */
+.top-bar {
+    -fx-background-color: -bg-topbar;
+    -fx-padding: 0 24px;
+    -fx-alignment: center-left;
+    -fx-border-color: -border-light;
+    -fx-border-width: 0 0 0.5px 0;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.04), 2, 0, 0, 1);
+}
+
+/* --- 左侧导航栏 --- */
+.side-nav {
+    -fx-background-color: -bg-nav;
+    -fx-padding: 12px 8px;
+    -fx-border-color: -border-light;
+    -fx-border-width: 0 0.5px 0 0;
+    -fx-pref-width: 200px;
+    -fx-min-width: 200px;
+}
+
+/* --- 底部播放栏 --- */
+.music-bar {
+    -fx-background-color: -bg-player;
+    -fx-padding: 8px 24px;
+    -fx-alignment: center;
+    -fx-border-color: -border-light;
+    -fx-border-width: 0.5px 0 0 0;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.04), 2, 0, 0, 1);
+}
+
+/* 播放器进度条 */
+.player-progress {
+    -fx-padding: 0;
+    -fx-background-radius: 3px;
+    -fx-background-insets: 0;
+    -fx-background-color: transparent;
+    -fx-accent: -primary;
+    -fx-control-inner-background: -bg-tertiary;
+}
+.player-progress .bar {
+    -fx-background-color: -primary;
+    -fx-background-radius: 3px;
+    -fx-padding: 0;
+}
+.player-progress .track {
+    -fx-background-color: -bg-tertiary;
+    -fx-background-radius: 3px;
+    -fx-background-insets: 0;
+}
+
+/* 播放器时间标签 */
+.player-time {
+    -fx-font-size: 11px;
+    -fx-text-fill: -text-secondary;
+    -fx-min-width: 36px;
+    -fx-alignment: center;
+}
+
+/* --- 图片卡片 --- */
+.image-card {
+    -fx-background-color: -bg-card;
+    -fx-background-radius: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.04), 2, 0, 0, 1);
+    -fx-border-width: 0;
+    -fx-cursor: hand;
+}
+.image-card:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 12, 0, 0, 4);
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+/* --- 用户头像 --- */
+.user-avatar {
+    -fx-background-radius: 50%;
+    -fx-border-color: -border;
+    -fx-border-width: 2px;
+    -fx-border-radius: 50%;
+}
+
+/* --- 主题选择器 --- */
+.theme-selector {
+    -fx-background-color: -bg-card;
+    -fx-background-radius: 10px;
+    -fx-padding: 12px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.04), 2, 0, 0, 1);
+}
+.theme-option {
+    -fx-background-radius: 50%;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+    -fx-border-width: 2px;
+}
+.theme-option.selected {
+    -fx-border-color: -primary;
+    -fx-border-width: 3px;
+}
+
+/* --- 登录页 --- */
+.login-container {
+    -fx-background-color: -bg-primary;
+}
+
+/* --- 动画 --- */
+.fade-in {
+    -fx-opacity: 0;
+}
+.fade-in.visible {
+    -fx-opacity: 1;
+}
+
+/* --- 分隔线 --- */
+.separator {
+    -fx-background-color: -border-light;
+}
+
+/* --- 标签页 --- */
+.tab-pane {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+.tab {
+    -fx-background-color: transparent;
+    -fx-text-fill: -text-secondary;
+    -fx-padding: 8px 16px;
+    -fx-border-width: 0;
+}
+.tab:selected {
+    -fx-text-fill: -primary;
+    -fx-border-color: -primary;
+    -fx-border-width: 0 0 2px 0;
+}
+.tab:hover {
+    -fx-text-fill: -text-primary;
+}
+.tab-content-area {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+/* --- 进度条 --- */
+.progress-bar {
+    -fx-background-color: -bg-tertiary;
+    -fx-background-radius: 4px;
+}
+.progress-bar .bar {
+    -fx-background-color: -primary;
+    -fx-background-radius: 4px;
+    -fx-padding: 2px;
+}
+
+/* --- 滑块 --- */
+.slider {
+    -fx-background-color: transparent;
+}
+.slider .track {
+    -fx-background-color: -bg-tertiary;
+    -fx-background-radius: 2px;
+}
+.slider .thumb {
+    -fx-background-color: -primary;
+    -fx-background-radius: 50%;
+}
+
+/* --- 阁务司后台管理 --- */
+.admin-view {
+    -fx-background-color: transparent;
+}
+.admin-section-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: 700;
+    -fx-text-fill: -text-primary;
+}
+.admin-subtitle {
+    -fx-font-size: 13px;
+    -fx-text-fill: -text-secondary;
+}
+.admin-stats-row {
+    -fx-padding: 0 0 8px 0;
+}
+.admin-tab-pane {
+    -fx-background-color: transparent;
+}
+.admin-tab-pane .tab-header-area {
+    -fx-padding: 0 0 12px 0;
+}
+.admin-tab-pane .tab-header-background {
+    -fx-background-color: -bg-card;
+    -fx-border-color: -border-light;
+    -fx-border-width: 0.5px;
+}
+.admin-tab-pane .tab {
+    -fx-background-color: transparent;
+    -fx-background-radius: 8px 8px 0 0;
+}
+.admin-tab-pane .tab:selected {
+    -fx-background-color: -primary-light;
+}
+.admin-tab-pane .tab .tab-label {
+    -fx-text-fill: -text-secondary;
+    -fx-font-size: 13px;
+}
+.admin-tab-pane .tab:selected .tab-label {
+    -fx-text-fill: -primary;
+    -fx-font-weight: 600;
+}
+.admin-tab-pane .tab-content-area {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+.admin-tab-content {
+    -fx-background-color: transparent;
+}
+.admin-tab-title {
+    -fx-font-size: 15px;
+    -fx-font-weight: 600;
+    -fx-text-fill: -text-primary;
+}
+.admin-toolbar {
+    -fx-padding: 0 0 8px 0;
+}
+.admin-error {
+    -fx-text-fill: -danger;
+    -fx-font-size: 13px;
+    -fx-padding: 8px 0 0 0;
+}
+
+/* 按钮变体 */
+.button-primary {
+    -fx-background-color: -primary;
+    -fx-text-fill: -primary-text;
+    -fx-background-radius: 8px;
+    -fx-padding: 5px 12px;
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+}
+.button-primary:hover {
+    -fx-background-color: -primary-hover;
+}
+.button-secondary {
+    -fx-background-color: -bg-tertiary;
+    -fx-text-fill: -text-primary;
+    -fx-background-radius: 8px;
+    -fx-padding: 5px 12px;
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+}
+.button-secondary:hover {
+    -fx-background-color: -bg-hover;
+}
+.button-danger {
+    -fx-background-color: -danger;
+    -fx-text-fill: #FFFFFF;
+    -fx-background-radius: 8px;
+    -fx-padding: 5px 12px;
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+}
+.button-danger:hover {
+    -fx-background-color: -danger-hover;
+}
+
+/* 下拉框 */
+.app-combo-box {
+    -fx-background-color: -bg-input;
+    -fx-background-radius: 10px;
+    -fx-border-color: transparent;
+    -fx-padding: 4px 8px;
+    -fx-font-size: 13px;
+}
+.app-combo-box:focused {
+    -fx-border-color: -primary;
+    -fx-border-width: 1.5px;
+}
+
+/* --- 入阁页（门上登录） --- */
+.gate-scene {
+    -fx-background-color: #0C121C;
+}
+.gate-window-controls {
+    -fx-pref-height: 40px;
+    -fx-max-height: 40px;
+    -fx-background-color: transparent;
+}
+.gate-window-title {
+    -fx-text-fill: rgba(216, 179, 106, 0.72);
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+}
+.gate-window-button {
+    -fx-min-width: 32px;
+    -fx-pref-width: 32px;
+    -fx-min-height: 28px;
+    -fx-pref-height: 28px;
+    -fx-background-color: rgba(255,255,255,0.04);
+    -fx-background-radius: 8px;
+    -fx-text-fill: rgba(248,250,252,0.72);
+    -fx-border-color: transparent;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+}
+.gate-window-button:hover {
+    -fx-background-color: rgba(255,255,255,0.12);
+    -fx-text-fill: #FFFFFF;
+}
+.gate-window-close:hover {
+    -fx-background-color: rgba(239,68,68,0.82);
+    -fx-text-fill: #FFFFFF;
+}
+.gate-login-panel {
+    -fx-background-color: rgba(20, 42, 49, 0.54);
+    -fx-background-radius: 12px;
+    -fx-border-color: rgba(216, 179, 106, 0.24);
+    -fx-border-radius: 12px;
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.14), 12, 0, 0, 3);
+}
+.gate-title {
+    -fx-text-fill: rgba(248, 250, 252, 0.96);
+    -fx-font-size: 22px;
+    -fx-font-weight: 700;
+}
+.gate-subtitle {
+    -fx-text-fill: rgba(216, 179, 106, 0.78);
+    -fx-font-size: 12px;
+}
+.gate-message {
+    -fx-text-fill: #D8B36A;
+    -fx-font-size: 16px;
+    -fx-font-weight: 600;
+}
+.gate-field-label {
+    -fx-font-size: 11px;
+    -fx-font-weight: 600;
+    -fx-text-fill: rgba(248, 250, 252, 0.72);
+}
+.gate-error {
+    -fx-font-size: 12px;
+    -fx-text-fill: #EF4444;
+    -fx-min-height: 18px;
+    -fx-pref-height: 18px;
+}
+.gate-link {
+    -fx-font-size: 11px;
+    -fx-text-fill: rgba(216, 179, 106, 0.86);
+    -fx-border-color: transparent;
+}
+.gate-input {
+    -fx-background-color: rgba(248, 250, 252, 0.88);
+    -fx-text-fill: #111827;
+    -fx-prompt-text-fill: #94A3B8;
+    -fx-background-radius: 10px;
+    -fx-border-color: rgba(216, 179, 106, 0.22);
+    -fx-border-radius: 10px;
+    -fx-border-width: 1px;
+    -fx-padding: 0 14px;
+    -fx-font-size: 13px;
+}
+.gate-input:focused {
+    -fx-border-color: rgba(216, 179, 106, 0.5);
+    -fx-border-width: 1.5px;
+}
+.gate-login-panel .app-button {
+    -fx-background-color: #2F8F5B;
+    -fx-text-fill: white;
+    -fx-background-radius: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.10), 8, 0, 0, 2);
+}
+.gate-login-panel .app-button:hover {
+    -fx-background-color: #287D50;
+}

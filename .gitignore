@@ -1,0 +1,46 @@
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Gradle
+.gradle/
+build/
+out/
+
+# Maven
+target/
+dependency-reduced-pom.xml
+
+# Java
+*.class
+*.war
+*.ear
+hs_err_pid*
+
+# 保留 lib/ 下的本地依赖 JAR
+# 构建产物中的 JAR 在 target/ 中已被忽略
+*.jar
+!lib/*.jar
+
+# Logs
+*.log
+
+# 应用数据（运行时生成，不应提交）
+.qiyunge/
+*.db
+*.db-wal
+*.db-shm
+
+# Node.js (NeteaseCloudMusicApi)
+tools/NeteaseCloudMusicApi/node_modules/
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# 临时文件
+*.tmp
+*.bak
+*~
