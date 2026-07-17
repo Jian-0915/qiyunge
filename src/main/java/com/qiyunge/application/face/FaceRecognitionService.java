@@ -1,25 +1,17 @@
 package com.qiyunge.application.face;
 
-import com.qiyunge.domain.entity.User;
 import com.qiyunge.domain.entity.UserFaceData;
 import com.qiyunge.infrastructure.repository.UserFaceDataRepository;
 import com.qiyunge.infrastructure.storage.AppStorage;
-import com.github.sarxos.webcam.Webcam;
-import com.github.sarxos.webcam.WebcamResolution;
-import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.DoublePointer;
 import org.bytedeco.javacpp.IntPointer;
 import org.bytedeco.javacpp.Loader;
-import org.bytedeco.javacv.Frame;
-import org.bytedeco.javacv.Java2DFrameConverter;
-import org.bytedeco.javacv.OpenCVFrameConverter;
 import org.bytedeco.opencv.global.opencv_imgcodecs;
 import org.bytedeco.opencv.opencv_core.*;
 import org.bytedeco.opencv.opencv_face.LBPHFaceRecognizer;
 import org.bytedeco.opencv.opencv_objdetect.CascadeClassifier;
+import org.bytedeco.opencv.opencv_videoio.VideoCapture;
 
-import java.awt.Dimension;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.IntBuffer;
@@ -35,27 +27,25 @@ import java.util.function.Consumer;
 import static org.bytedeco.opencv.global.opencv_core.*;
 import static org.bytedeco.opencv.global.opencv_imgcodecs.*;
 import static org.bytedeco.opencv.global.opencv_imgproc.*;
+import static org.bytedeco.opencv.global.opencv_videoio.*;
 
 /**
- * 人脸识别服务：基于 OpenCV LBPH 算法 + sarxos Webcam Capture 摄像头捕获。
- * Webcam Capture 比 OpenCV VideoCapture 启动更快、更轻量。
+ * 人脸识别服务：基于 OpenCV LBPH 算法 + OpenCV VideoCapture 摄像头捕获。
  */
 public class FaceRecognitionService {
 
-    // Webcam Capture 分辨率（降低以减少数据量）
-    private static final Dimension CAPTURE_SIZE = WebcamResolution.VGA.getSize(); // 640x480
+    private static final int CAPTURE_WIDTH = 640;
+    private static final int CAPTURE_HEIGHT = 480;
     private static final int FACE_WIDTH = 200;
     private static final int FACE_HEIGHT = 200;
     private static final double RECOGNITION_THRESHOLD = 65.0;
     private static final int MIN_SAMPLES_FOR_TRAINING = 5;
 
-    private final AppStorage appStorage;
     private final UserFaceDataRepository faceDataRepository;
     private final Path faceDataPath;
     private final ExecutorService executor;
 
-    // Webcam Capture
-    private volatile Webcam webcam;
+    private volatile VideoCapture videoCapture;
     private volatile boolean cameraOpen = false;
 
     // OpenCV
@@ -63,12 +53,7 @@ public class FaceRecognitionService {
     private final AtomicBoolean isProcessing = new AtomicBoolean(false);
     private volatile boolean nativeReady = false;
 
-    // 图像转换器（BufferedImage <-> Mat）
-    private final Java2DFrameConverter java2dConverter = new Java2DFrameConverter();
-    private final OpenCVFrameConverter.ToMat matConverter = new OpenCVFrameConverter.ToMat();
-
     public FaceRecognitionService(AppStorage appStorage, UserFaceDataRepository faceDataRepository) {
-        this.appStorage = appStorage;
         this.faceDataRepository = faceDataRepository;
         this.faceDataPath = appStorage.getFaceDataPath();
         this.executor = Executors.newSingleThreadExecutor(r -> {
@@ -166,50 +151,62 @@ public class FaceRecognitionService {
         return null;
     }
 
-    // ==================== 摄像头管理（Webcam Capture）====================
+    // ==================== 摄像头管理（OpenCV VideoCapture）====================
 
     public boolean openCamera() {
-        if (cameraOpen && webcam != null && webcam.isOpen()) {
+        if (cameraOpen && videoCapture != null && !videoCapture.isNull()) {
             return true;
         }
+        forceCloseCamera();
         try {
-            webcam = Webcam.getDefault();
-            if (webcam == null) {
-                System.err.println("[FaceRecognition] No webcam found");
+            long start = System.currentTimeMillis();
+            videoCapture = new VideoCapture();
+            boolean opened;
+            String os = System.getProperty("os.name", "").toLowerCase();
+            if (os.contains("win")) {
+                opened = videoCapture.open(0, CAP_DSHOW);
+            } else {
+                opened = videoCapture.open(0);
+            }
+            if (!opened || videoCapture.isNull() || !videoCapture.isOpened()) {
+                System.err.println("[FaceRecognition] No webcam found or failed to open");
+                forceCloseCamera();
                 return false;
             }
-            webcam.setViewSize(CAPTURE_SIZE);
-            webcam.open(true);  // true = async open, non-blocking
-            cameraOpen = webcam.isOpen();
-            if (cameraOpen) {
-                System.out.println("[FaceRecognition] Camera opened (Webcam Capture)");
-            } else {
-                System.err.println("[FaceRecognition] Failed to open camera");
-            }
-            return cameraOpen;
+            videoCapture.set(CAP_PROP_FRAME_WIDTH, CAPTURE_WIDTH);
+            videoCapture.set(CAP_PROP_FRAME_HEIGHT, CAPTURE_HEIGHT);
+            cameraOpen = true;
+            System.out.println("[FaceRecognition] Camera opened in " + (System.currentTimeMillis() - start) + "ms");
+            return true;
         } catch (Exception e) {
             System.err.println("[FaceRecognition] Camera open error: " + e.getMessage());
+            forceCloseCamera();
             return false;
         }
     }
 
-    public void closeCamera() {
-        if (webcam != null) {
+    private void forceCloseCamera() {
+        if (videoCapture != null) {
             try {
-                if (webcam.isOpen()) {
-                    webcam.close();
+                if (videoCapture.isOpened()) {
+                    videoCapture.release();
                 }
-            } catch (Exception e) {
-                System.err.println("[FaceRecognition] Camera close error: " + e.getMessage());
-            }
-            webcam = null;
+                videoCapture.close();
+            } catch (Exception ignored) {}
+            videoCapture = null;
+            cameraOpen = false;
         }
-        cameraOpen = false;
-        System.out.println("[FaceRecognition] Camera closed");
+    }
+
+    public void closeCamera() {
+        if (videoCapture != null) {
+            forceCloseCamera();
+            System.out.println("[FaceRecognition] Camera closed");
+        }
     }
 
     public boolean isCameraOpen() {
-        return cameraOpen && webcam != null && webcam.isOpen();
+        return cameraOpen && videoCapture != null && !videoCapture.isNull() && videoCapture.isOpened();
     }
 
     // ==================== 帧捕获与检测 ====================
@@ -219,16 +216,12 @@ public class FaceRecognitionService {
             return null;
         }
 
-        BufferedImage image = webcam.getImage();
-        if (image == null) {
+        Mat mat = new Mat();
+        if (!videoCapture.read(mat) || mat.empty()) {
+            mat.release();
             return null;
         }
 
-        // BufferedImage -> Frame -> Mat
-        Frame frame = java2dConverter.convert(image);
-        Mat mat = matConverter.convert(frame);
-
-        // 水平翻转（镜像效果）
         Mat flipped = new Mat();
         flip(mat, flipped, 1);
         mat.release();
@@ -249,7 +242,7 @@ public class FaceRecognitionService {
                 3,
                 0,
                 new Size(100, 100),
-                new Size(CAPTURE_SIZE.width, CAPTURE_SIZE.height)
+                new Size(CAPTURE_WIDTH, CAPTURE_HEIGHT)
             );
         }
         gray.release();
@@ -559,8 +552,6 @@ public class FaceRecognitionService {
         stopRecognitionLoop();
         closeCamera();
         executor.shutdown();
-        java2dConverter.close();
-        matConverter.close();
         System.out.println("[FaceRecognition] Service shutdown");
     }
 

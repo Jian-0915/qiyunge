@@ -6,6 +6,7 @@ import com.qiyunge.application.service.AdminService;
 import com.qiyunge.application.service.AsyncExecutor;
 import com.qiyunge.application.service.AuditLogService;
 import com.qiyunge.application.service.GalleryService;
+import com.qiyunge.application.service.EntertainmentService;
 import com.qiyunge.application.service.ImageProvider;
 import com.qiyunge.application.service.JamendoProvider;
 import com.qiyunge.application.service.LocalMusicProvider;
@@ -30,6 +31,7 @@ import com.qiyunge.infrastructure.repository.AuditLogRepository;
 import com.qiyunge.infrastructure.repository.FavoriteSongRepository;
 import com.qiyunge.infrastructure.repository.GalleryImageRepository;
 import com.qiyunge.infrastructure.repository.ImageAlbumItemRepository;
+import com.qiyunge.infrastructure.repository.GameRecordRepository;
 import com.qiyunge.infrastructure.repository.ImageAlbumRepository;
 import com.qiyunge.infrastructure.repository.UserImagePreferenceRepository;
 import com.qiyunge.application.service.PlaylistService;
@@ -66,6 +68,7 @@ public class AppContext {
     private UserImagePreferenceRepository userImagePreferenceRepository;
     private ImageAlbumRepository imageAlbumRepository;
     private ImageAlbumItemRepository imageAlbumItemRepository;
+    private GameRecordRepository gameRecordRepository;
 
     // Services
     private UserService userService;
@@ -84,8 +87,11 @@ public class AppContext {
     private LyricService lyricService;
     private GalleryService galleryService;
     private OnlineImageService onlineImageService;
+    private EntertainmentService entertainmentService;
 
     private UserSession userSession;
+
+    private volatile boolean shuttingDown = false;
 
     /**
      * 分步初始化回调接口
@@ -129,6 +135,7 @@ public class AppContext {
         userImagePreferenceRepository = new UserImagePreferenceRepository(databaseManager);
         imageAlbumRepository = new ImageAlbumRepository(databaseManager);
         imageAlbumItemRepository = new ImageAlbumItemRepository(databaseManager);
+        gameRecordRepository = new GameRecordRepository(databaseManager);
         System.out.println("[INIT] 3. 数据仓库初始化: " + (System.currentTimeMillis() - t2) + "ms");
 
         // 3. 核心服务
@@ -177,6 +184,10 @@ public class AppContext {
         registerImageProvider(new WikimediaProvider());
         registerImageProvider(new UnsplashProvider(configStorage.get("unsplashClientId", null)));
         registerImageProvider(new PixabayProvider(configStorage.get("pixabayApiKey", null)));
+
+        // 娱乐服务
+        entertainmentService = new EntertainmentService(gameRecordRepository);
+        System.out.println("[INIT] 7.5 娱乐服务初始化完成");
         System.out.println("[INIT] 7. 图库服务初始化: " + (System.currentTimeMillis() - t6) + "ms");
 
         // 7. 网易云 API（异步启动，不阻塞）
@@ -248,6 +259,7 @@ public class AppContext {
     }
 
     public void shutdown() {
+        shuttingDown = true;
         if (userSession.isLoggedIn()) {
             var userOpt = userService.findById(userSession.getUserId());
             userOpt.ifPresent(auditLogService::logLogout);
@@ -261,6 +273,7 @@ public class AppContext {
             configStorage.set("musicVolume", String.valueOf(musicPlayerService.volumeProperty().get()));
             configStorage.set("playMode", musicPlayerService.getPlayMode().name());
             musicPlayerService.stopCurrent();
+            musicPlayerService.cleanupTempFiles();
         }
         if (neteaseApiProcessManager != null) {
             neteaseApiProcessManager.stop();
@@ -291,7 +304,10 @@ public class AppContext {
 
     public Stage getPrimaryStage() { return primaryStage; }
     public void setPrimaryStage(Stage primaryStage) { this.primaryStage = primaryStage; }
-    DatabaseManager getDatabaseManager() { return databaseManager; }
+    DatabaseManager getDatabaseManager() {
+        if (databaseManager == null) throw new IllegalStateException("AppContext not initialized");
+        return databaseManager;
+    }
     public AppStorage getAppStorage() { return appStorage; }
     public StatisticsService getStatisticsService() { return statisticsService; }
     public ConfigStorage getConfigStorage() { return configStorage; }
@@ -304,7 +320,10 @@ public class AppContext {
     public AdminService getAdminService() { return adminService; }
     public AuthService getAuthService() { return authService; }
     public MusicService getMusicService() { return musicService; }
-    public MusicPlayerService getMusicPlayerService() { return musicPlayerService; }
+    public MusicPlayerService getMusicPlayerService() {
+        if (musicPlayerService == null) throw new IllegalStateException("AppContext not initialized");
+        return musicPlayerService;
+    }
     public AsyncExecutor getAsyncExecutor() { return asyncExecutor; }
     public PlaylistService getPlaylistService() { return playlistService; }
     public MusicProviderRegistry getMusicProviderRegistry() { return musicProviderRegistry; }
@@ -313,8 +332,19 @@ public class AppContext {
     public NeteaseApiProcessManager getNeteaseApiProcessManager() { return neteaseApiProcessManager; }
     public GalleryService getGalleryService() { return galleryService; }
     public OnlineImageService getOnlineImageService() { return onlineImageService; }
+    public EntertainmentService getEntertainmentService() {
+        if (entertainmentService == null) throw new IllegalStateException("AppContext not initialized");
+        return entertainmentService;
+    }
 
     public FaceRecognitionService getFaceRecognitionService() { return faceRecognitionService; }
 
-    public UserSession getUserSession() { return userSession; }
+    public UserSession getUserSession() {
+        if (userSession == null) throw new IllegalStateException("AppContext not initialized");
+        return userSession;
+    }
+
+    public boolean isShuttingDown() {
+        return shuttingDown;
+    }
 }

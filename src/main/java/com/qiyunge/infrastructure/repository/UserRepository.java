@@ -5,7 +5,6 @@ import com.qiyunge.infrastructure.database.DatabaseManager;
 import com.qiyunge.infrastructure.util.DateTimeUtil;
 
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -155,11 +154,26 @@ public class UserRepository {
     }
 
     public boolean deleteUser(int userId) {
-        // 事务中：先清理无 CASCADE 的关联表，再删除用户
         return dbManager.withTransaction(conn -> {
+            String username;
+            try (PreparedStatement stmt = conn.prepareStatement(
+                    "SELECT username FROM users WHERE id = ?")) {
+                stmt.setInt(1, userId);
+                try (var rs = stmt.executeQuery()) {
+                    if (!rs.next()) return false;
+                    username = rs.getString("username");
+                }
+            }
+
             try (PreparedStatement stmt = conn.prepareStatement(
                     "DELETE FROM audit_logs WHERE user_id = ?")) {
                 stmt.setInt(1, userId);
+                stmt.executeUpdate();
+            }
+
+            try (PreparedStatement stmt = conn.prepareStatement(
+                    "DELETE FROM registration_requests WHERE username = ?")) {
+                stmt.setString(1, username);
                 stmt.executeUpdate();
             }
 
@@ -168,9 +182,6 @@ public class UserRepository {
                 stmt.setInt(1, userId);
                 int rows = stmt.executeUpdate();
                 if (rows == 0) return false;
-
-                // 有 CASCADE 的表自动级联：
-                // favorite_songs, play_history, user_image_preferences, playlists, user_face_data
                 return true;
             }
         });

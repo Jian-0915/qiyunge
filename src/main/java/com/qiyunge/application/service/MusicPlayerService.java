@@ -61,13 +61,15 @@ public class MusicPlayerService {
     private volatile boolean stopping = false;
     private volatile int currentIndex = -1;
     private Timer progressTimer;
-    private volatile Song lastNotifiedSong; // 防止同一首歌重复触发 playbackReady
     private volatile int lastNotifiedSongId = -1; // 基于 ID 去重
     private volatile long lastNotifyTime = 0; // 上次通知时间戳
 
     // 回调列表（支持多个监听者，线程安全）
     private final List<Consumer<Song>> playbackReadyListeners = new CopyOnWriteArrayList<>();
     private final List<Consumer<Song>> playbackErrorListeners = new CopyOnWriteArrayList<>();
+
+    // 临时文件跟踪
+    private final java.util.List<java.io.File> tempAliasFiles = new java.util.ArrayList<>();
 
     public MusicPlayerService(com.qiyunge.app.AppContext appContext) {
         this.appContext = appContext;
@@ -83,11 +85,10 @@ public class MusicPlayerService {
 
     // ===== 播放核心 =====
 
-    public void play(Song song) {
+    public synchronized void play(Song song) {
         if (song == null) return;
 
         // 防止同一首歌重复触发 playbackReady（JavaFX MediaPlayer.onReady 可能多次触发）
-        lastNotifiedSong = song;
 
         // 如果是在线歌曲且没有直接 URL，先解析播放地址
         if (song.getSource() != null && !"local".equals(song.getSource())) {
@@ -129,6 +130,9 @@ public class MusicPlayerService {
     /** 设置队列并播放指定索引（用于从歌曲列表/曲笺播放） */
     public void playQueue(List<Song> songs, int startIndex) {
         if (songs == null || songs.isEmpty()) return;
+        if (startIndex < 0 || startIndex >= songs.size()) {
+            startIndex = 0;
+        }
         queue.setAll(songs);
         playAtIndexInternal(startIndex);
     }
@@ -156,7 +160,7 @@ public class MusicPlayerService {
         shuffleIndex = 0;
     }
 
-    public void togglePause() {
+    public synchronized void togglePause() {
         try {
             if (useJLayer && jlayerPlayer != null) {
                 if (playing.get()) {
@@ -178,7 +182,8 @@ public class MusicPlayerService {
         }
     }
 
-    public void playNext() {
+    public synchronized void playNext() {
+        if (appContext != null && appContext.isShuttingDown()) return;
         if (queue.isEmpty()) return;
         switch (playMode.get()) {
             case SEQUENTIAL -> currentIndex = (currentIndex + 1) % queue.size();
@@ -196,7 +201,8 @@ public class MusicPlayerService {
         play(queue.get(currentIndex));
     }
 
-    public void playPrevious() {
+    public synchronized void playPrevious() {
+        if (appContext != null && appContext.isShuttingDown()) return;
         if (queue.isEmpty()) return;
         switch (playMode.get()) {
             case SEQUENTIAL -> currentIndex = currentIndex > 0 ? currentIndex - 1 : queue.size() - 1;
@@ -210,7 +216,7 @@ public class MusicPlayerService {
         play(queue.get(currentIndex));
     }
 
-    public void stopCurrent() {
+    public synchronized void stopCurrent() {
         stopping = true;
         errorMessage.set("");
         if (progressTimer != null) { progressTimer.cancel(); progressTimer = null; }
@@ -471,10 +477,20 @@ public class MusicPlayerService {
             Files.copy(source, alias, StandardCopyOption.REPLACE_EXISTING);
         }
         alias.toFile().deleteOnExit();
+        tempAliasFiles.add(alias.toFile());
         return alias;
     }
 
     // ===== 工具 =====
+
+    public void cleanupTempFiles() {
+        for (java.io.File file : tempAliasFiles) {
+            try {
+                if (file.exists()) file.delete();
+            } catch (Exception ignored) {}
+        }
+        tempAliasFiles.clear();
+    }
 
     private String formatTime(double seconds) {
         if (seconds <= 0) return "0:00";

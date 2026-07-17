@@ -39,6 +39,7 @@ public class DatabaseManager {
                 .dataSource(jdbcUrl, null, null)
                 .locations("classpath:db/migration")
                 .load();
+            flyway.repair();
             var result = flyway.migrate();
             System.out.println("[DB] Flyway migration completed in " + (System.currentTimeMillis() - flywayStart) + "ms, " + result.migrationsExecuted + " migrations applied.");
         } catch (Exception e) {
@@ -107,7 +108,13 @@ public class DatabaseManager {
                 conn.commit();
                 return result;
             } catch (Exception e) {
-                conn.rollback();
+                try {
+                    conn.rollback();
+                } catch (SQLException rollbackEx) {
+                    RuntimeException ex2 = new RuntimeException("Failed to rollback transaction", rollbackEx);
+                    ex2.addSuppressed(e);
+                    throw ex2;
+                }
                 throw new RuntimeException("Transaction failed", e);
             }
         } catch (SQLException e) {
@@ -122,7 +129,13 @@ public class DatabaseManager {
                 action.accept(conn);
                 conn.commit();
             } catch (Exception e) {
-                conn.rollback();
+                try {
+                    conn.rollback();
+                } catch (SQLException rollbackEx) {
+                    RuntimeException ex2 = new RuntimeException("Failed to rollback transaction", rollbackEx);
+                    ex2.addSuppressed(e);
+                    throw ex2;
+                }
                 throw new RuntimeException("Transaction failed", e);
             }
         } catch (SQLException e) {

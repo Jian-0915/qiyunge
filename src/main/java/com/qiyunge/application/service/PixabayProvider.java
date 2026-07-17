@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qiyunge.domain.entity.GalleryImage;
 import com.qiyunge.infrastructure.util.StringUtils;
-import java.net.http.HttpRequest;
 import java.util.ArrayList;
 import java.util.List;
 

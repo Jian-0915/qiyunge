@@ -79,7 +79,6 @@ public class AlbumCoverExtractor {
             if ("APIC".equals(frameId)) {
                 // APIC frame: encoding(1) + mime(n) + null(1) + type(1) + desc(n) + null(1) + image data
                 int contentStart = offset + 10;
-                int encoding = data[contentStart] & 0xFF;
                 int mimeEnd = indexOf(data, 0, contentStart + 1);
                 int descStart = mimeEnd + 1 + 1 + 1; // skip mime null, picture type, then desc
                 // Find desc null terminator

@@ -3,7 +3,6 @@ package com.qiyunge.ui.music;
 import com.qiyunge.app.AppContext;
 import com.qiyunge.application.service.MusicPlayerService;
 import com.qiyunge.application.service.MusicProvider;
-import com.qiyunge.application.service.MusicProviderRegistry;
 import com.qiyunge.application.service.MusicService;
 import com.qiyunge.application.service.OnlineMusicService;
 import com.qiyunge.application.service.PlaylistService;
@@ -19,7 +18,6 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.scene.control.ChoiceDialog;
-import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
 
@@ -58,7 +56,6 @@ public class MusicViewModel {
     private final IntegerProperty songCount = new SimpleIntegerProperty(0);
 
     // ===== 在线音乐 =====
-    private final MusicProviderRegistry providerRegistry;
     private final OnlineMusicService onlineMusicService;
     private final ObservableList<Song> onlineSongs = FXCollections.observableArrayList();
     private final StringProperty searchMode = new SimpleStringProperty("local"); // "local" | "online"
@@ -72,7 +69,6 @@ public class MusicViewModel {
         this.playerService = appContext.getMusicPlayerService();
         this.playlistService = appContext.getPlaylistService();
         this.asyncExecutor = appContext.getAsyncExecutor();
-        this.providerRegistry = appContext.getMusicProviderRegistry();
         this.onlineMusicService = appContext.getOnlineMusicService();
         this.filteredSongs = new FilteredList<>(songs, s -> true);
         this.sortedSongs = new SortedList<>(filteredSongs);
@@ -321,13 +317,6 @@ public class MusicViewModel {
         }
     }
 
-    private boolean containsLocalSong(int songId) {
-        for (Song s : songs) {
-            if (s.getId() == songId) return true;
-        }
-        return false;
-    }
-
     /** 触发表格刷新，使 Cell 重新渲染（如收藏状态变化） */
     public void refreshTable() {
         // 通过替换列表内容触发 TableView 重新渲染所有 Cell
@@ -428,13 +417,6 @@ public class MusicViewModel {
         });
     }
 
-    /**
-     * 弹出选择曲笺对话框。
-     * @deprecated 此方法直接创建 JavaFX ChoiceDialog，违反了 MVVM 职责分离原则。
-     *             对话框创建应在 View 层完成，ViewModel 仅提供数据（通过 {@link #getPlaylists()}）。
-     *             将在未来版本中移除此方法。
-     */
-    @Deprecated
     public void showAddToPlaylistDialog(Song song) {
         List<Playlist> currentPlaylists = new ArrayList<>(playlists);
         if (currentPlaylists.isEmpty()) {

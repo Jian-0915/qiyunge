@@ -90,6 +90,10 @@ public class MusicBar extends HBox {
         });
         // 收藏按钮点击事件需要外部传入，这里仅做视觉展示
         // 实际收藏功能通过歌曲表格操作
+        favBtn.setDisable(true);
+        favBtn.setOpacity(0.5);
+        Tooltip favTooltip = new Tooltip("请通过歌曲列表收藏");
+        favBtn.setTooltip(favTooltip);
 
         songInfo.getChildren().addAll(coverView, songText, favBtn);
 
@@ -157,10 +161,6 @@ public class MusicBar extends HBox {
         progressBar.setMaxHeight(8);
         progressBar.getStyleClass().add("player-progress");
         progressBar.progressProperty().bind(progress);
-        progressBar.setOnMousePressed(e -> {
-            double ratio = e.getX() / progressBar.getWidth();
-            onSeek.call(Math.max(0, Math.min(1, ratio)));
-        });
         progressBar.setOnMouseReleased(e -> {
             double ratio = e.getX() / progressBar.getWidth();
             onSeek.call(Math.max(0, Math.min(1, ratio)));

@@ -134,7 +134,7 @@ public class AdminView extends VBox {
         table.getStyleClass().add("app-table-view");
         table.setItems(viewModel.getFilteredUsers());
         table.setPlaceholder(new Label("暂无用户"));
-        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
 
         TableColumn<User, String> usernameCol = new TableColumn<>("用户名");
         usernameCol.setCellValueFactory(d -> new javafx.beans.property.SimpleStringProperty(d.getValue().getUsername()));
@@ -246,7 +246,9 @@ public class AdminView extends VBox {
             }
         });
 
-        table.getColumns().addAll(usernameCol, displayCol, roleCol, statusCol, createdCol, loginCol, actionCol);
+        @SuppressWarnings("unchecked")
+        TableColumn<User, ?>[] cols = new TableColumn[] { usernameCol, displayCol, roleCol, statusCol, createdCol, loginCol, actionCol };
+        table.getColumns().addAll(cols);
         VBox.setVgrow(table, Priority.ALWAYS);
 
         tab.getChildren().addAll(toolbar, table);
@@ -265,7 +267,7 @@ public class AdminView extends VBox {
         TableView<RegistrationRequest> table = new TableView<>();
         table.getStyleClass().add("app-table-view");
         table.setItems(viewModel.getRequests());
-        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
         table.setPlaceholder(new Label("暂无待审批的入阁申请"));
 
         TableColumn<RegistrationRequest, String> reqUserCol = new TableColumn<>("用户名");
@@ -335,7 +337,9 @@ public class AdminView extends VBox {
             }
         });
 
-        table.getColumns().addAll(reqUserCol, reqNameCol, reqReasonCol, reqTimeCol, reqActionCol);
+        @SuppressWarnings("unchecked")
+        TableColumn<RegistrationRequest, ?>[] cols = new TableColumn[] { reqUserCol, reqNameCol, reqReasonCol, reqTimeCol, reqActionCol };
+        table.getColumns().addAll(cols);
         VBox.setVgrow(table, Priority.ALWAYS);
 
         tab.getChildren().addAll(title, table);
@@ -354,7 +358,7 @@ public class AdminView extends VBox {
         TableView<AuditLog> table = new TableView<>();
         table.getStyleClass().add("app-table-view");
         table.setItems(viewModel.getLogs());
-        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
         table.setPlaceholder(new Label("暂无操作记录"));
 
         TableColumn<AuditLog, String> logActionCol = new TableColumn<>("动作");
@@ -369,7 +373,9 @@ public class AdminView extends VBox {
         logTimeCol.setCellValueFactory(d -> new javafx.beans.property.SimpleStringProperty(
             d.getValue().getCreatedAt() != null ? d.getValue().getCreatedAt().toString() : "-"));
 
-        table.getColumns().addAll(logActionCol, logDetailCol, logTimeCol);
+        @SuppressWarnings("unchecked")
+        TableColumn<AuditLog, ?>[] cols = new TableColumn[] { logActionCol, logDetailCol, logTimeCol };
+        table.getColumns().addAll(cols);
         VBox.setVgrow(table, Priority.ALWAYS);
 
         tab.getChildren().addAll(title, table);

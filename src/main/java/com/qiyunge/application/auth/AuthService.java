@@ -24,6 +24,7 @@ public class AuthService {
     private final UserRepository userRepository;
     private final AuditLogService auditLogService;
     private final RegistrationRequestRepository registrationRequestRepository;
+    private final DatabaseManager databaseManager;
     private FaceRecognitionService faceRecognitionService;
 
     public AuthService(DatabaseManager dbManager,
@@ -32,6 +33,7 @@ public class AuthService {
                        RegistrationRequestRepository registrationRequestRepository) {
         this.userService = new UserService(userRepository);
         this.userRepository = userRepository;
+        this.databaseManager = dbManager;
         this.auditLogService = auditLogService;
         this.registrationRequestRepository = registrationRequestRepository;
     }
@@ -184,6 +186,24 @@ public class AuthService {
 
         if (userService.findByUsername(username.trim()).isPresent()) {
             return false;
+        }
+
+        // Check if there's already a pending request with the same username
+        try {
+            boolean hasPending = databaseManager.withConnection(conn -> {
+                String checkPendingSql = "SELECT COUNT(*) FROM registration_requests WHERE username = ? AND status = 'pending'";
+                try (var stmt = conn.prepareStatement(checkPendingSql)) {
+                    stmt.setString(1, username);
+                    try (var rs = stmt.executeQuery()) {
+                        return rs.next() && rs.getInt(1) > 0;
+                    }
+                }
+            });
+            if (hasPending) {
+                return false;
+            }
+        } catch (Exception e) {
+            // Ignore check failure, proceed with registration
         }
 
         String hash = BCrypt.hashpw(password, BCrypt.gensalt());

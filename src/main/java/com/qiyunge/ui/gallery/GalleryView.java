@@ -6,9 +6,6 @@ import com.qiyunge.domain.entity.ImageAlbum;
 import com.qiyunge.application.service.ImageProvider;
 import com.qiyunge.ui.components.AppButton;
 import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -22,7 +19,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
@@ -293,7 +289,7 @@ public class GalleryView extends BorderPane {
     private TableView<GalleryImage> createImageTable() {
         TableView<GalleryImage> table = new TableView<>();
         table.getStyleClass().add("app-table-view");
-        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
 
         TableColumn<GalleryImage, String> titleCol = new TableColumn<>("标题");
         titleCol.setCellValueFactory(d -> new javafx.beans.property.SimpleStringProperty(d.getValue().getTitle()));
@@ -318,7 +314,9 @@ public class GalleryView extends BorderPane {
         dateCol.setCellValueFactory(d -> new javafx.beans.property.SimpleStringProperty(d.getValue().getCreatedAt()));
         dateCol.setMinWidth(120);
 
-        table.getColumns().addAll(titleCol, categoryCol, sizeCol, resCol, dateCol);
+        @SuppressWarnings("unchecked")
+        TableColumn<GalleryImage, ?>[] cols = new TableColumn[] { titleCol, categoryCol, sizeCol, resCol, dateCol };
+        table.getColumns().addAll(cols);
 
         // 双击查看详情
         table.setRowFactory(tv -> {
@@ -576,8 +574,6 @@ public class GalleryView extends BorderPane {
         VBox.setVgrow(albumContainer, Priority.ALWAYS);
 
         // ===== 索引视图：图集列表 =====
-        ObservableList<Object> albumIndexItems = FXCollections.observableArrayList();
-
         ListView<javafx.scene.Node> albumIndexListView = new ListView<>();
         albumIndexListView.getStyleClass().add("playlist-list");
         VBox.setVgrow(albumIndexListView, Priority.ALWAYS);
@@ -1283,12 +1279,6 @@ public class GalleryView extends BorderPane {
         return selected;
     }
 
-    /** 更新批量操作栏状态 */
-    private void updateBatchBarState(FlowPane imageGrid, AppButton... buttons) {
-        updateBatchBarState(imageGrid, buttons[0], buttons[1], buttons[2], (Label) buttons[2].getParent().getChildrenUnmodifiable().stream()
-            .filter(n -> n instanceof Label).findFirst().orElse(null));
-    }
-
     private void updateBatchBarState(FlowPane imageGrid, AppButton favBtn, AppButton delBtn, AppButton albumBtn, Label selectionLabel) {
         int count = getSelectedImages(imageGrid).size();
         boolean hasSelection = count > 0;
@@ -1412,7 +1402,7 @@ public class GalleryView extends BorderPane {
             index = 0;
         }
 
-        ImageDetailDialog dialog = new ImageDetailDialog(images, index,
+        ImageDetailDialog dialog = new ImageDetailDialog(appContext, images, index,
             () -> viewModel.toggleFavorite(image),
             () -> viewModel.deleteImage(image.getId()),
             new ImageDetailDialog.OnAddToAlbumCallback() {

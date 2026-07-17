@@ -6,7 +6,6 @@ import javazoom.jl.player.Player;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.function.Consumer;
 
 /**
  * JLayer MP3 播放器包装器：支持播放/暂停/停止/音量。
@@ -26,7 +25,6 @@ public class JLayerAudioPlayer {
     private volatile long playStartTime = 0; // System.currentTimeMillis when play/resume started
     private volatile long estimatedDurationMs = 0; // 文件预估时长（ms），用于 seek 时计算字节偏移
 
-    private Consumer<Double> onProgress;
     private Runnable onEndOfMedia;
     private Runnable onError;
 
@@ -234,10 +232,6 @@ public class JLayerAudioPlayer {
         } catch (Exception e) {
             System.err.println("[JLayer] Volume control failed: " + e.getMessage());
         }
-    }
-
-    public void setOnProgress(Consumer<Double> callback) {
-        this.onProgress = callback;
     }
 
     public void setOnEndOfMedia(Runnable callback) {

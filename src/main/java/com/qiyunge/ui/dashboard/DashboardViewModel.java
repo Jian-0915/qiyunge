@@ -16,6 +16,7 @@ public class DashboardViewModel {
 
     private final StringProperty greeting = new SimpleStringProperty("");
     private final StringProperty greetingSub = new SimpleStringProperty("");
+    private final StringProperty welcomeBack = new SimpleStringProperty("");
     private final IntegerProperty pendingCount = new SimpleIntegerProperty(0);
     private final IntegerProperty totalUsers = new SimpleIntegerProperty(0);
     private final IntegerProperty totalSongs = new SimpleIntegerProperty(0);
@@ -48,6 +49,7 @@ public class DashboardViewModel {
         else timeGreeting = "晚上好";
 
         greeting.set(timeGreeting + "，" + displayName);
+        welcomeBack.set("欢迎回来，" + displayName);
 
         String[] subs = {
             "云很轻，事情可以慢慢来。",
@@ -97,6 +99,7 @@ public class DashboardViewModel {
     // Properties
     public StringProperty greetingProperty() { return greeting; }
     public StringProperty greetingSubProperty() { return greetingSub; }
+    public StringProperty welcomeBackProperty() { return welcomeBack; }
     public IntegerProperty pendingCountProperty() { return pendingCount; }
     public IntegerProperty totalUsersProperty() { return totalUsers; }
     public IntegerProperty totalSongsProperty() { return totalSongs; }

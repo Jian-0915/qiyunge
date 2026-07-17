@@ -60,6 +60,11 @@ public class FaceLoginDialog extends Stage {
         setScene(scene);
 
         centerOnScreen();
+
+        setOnCloseRequest(e -> {
+            e.consume();
+            closeDialog();
+        });
     }
 
     private VBox createUI() {

@@ -28,7 +28,6 @@ public class NeteaseApiProcessManager {
     private ProcessHandle processHandle;
     private int usedPort = -1;
     private boolean ownProcess = false;
-    private volatile boolean running = false;
 
     public NeteaseApiProcessManager(AppStorage appStorage) {
         this.toolsDir = appStorage.getToolsDir();
@@ -51,7 +50,6 @@ public class NeteaseApiProcessManager {
             if (isHealthy(baseUrl)) {
                 System.out.println("[NeteaseApiManager] 端口 " + port + " 已有健康服务，直接复用");
                 this.usedPort = port;
-                this.running = true;
                 adoptRecordedProcess();
                 return Optional.of(baseUrl);
             }
@@ -62,7 +60,6 @@ public class NeteaseApiProcessManager {
                 if (startNodeProcess(port)) {
                     this.usedPort = port;
                     this.ownProcess = true;
-                    this.running = true;
                     return Optional.of(baseUrl);
                 }
             } else {
@@ -113,7 +110,6 @@ public class NeteaseApiProcessManager {
         processHandle = null;
         usedPort = -1;
         ownProcess = false;
-        running = false;
     }
 
     /**

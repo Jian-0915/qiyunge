@@ -8,7 +8,6 @@ import com.qiyunge.domain.entity.Song;
 import com.qiyunge.ui.components.AppButton;
 import com.qiyunge.ui.components.LyricPane;
 import com.qiyunge.ui.components.MusicBar;
-import com.qiyunge.infrastructure.util.LyricParser.LyricLine;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -16,6 +15,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.Node;
 import javafx.scene.layout.*;
 
 import java.time.format.DateTimeFormatter;
@@ -150,11 +150,14 @@ public class MusicView extends BorderPane {
             case "playlists" -> showPlaylists();
             case "import" -> {
                 viewModel.importLocalFiles();
-                // 导入完成后回到全部歌曲
                 navigateTo("allSongs");
             }
             case "settings" -> showSettings();
             default -> showAllSongs();
+        }
+        if (!contentArea.getChildren().isEmpty()) {
+            Node first = contentArea.getChildren().get(0);
+            VBox.setVgrow(first, Priority.ALWAYS);
         }
     }
 
@@ -618,7 +621,7 @@ public class MusicView extends BorderPane {
         if (items instanceof javafx.collections.transformation.SortedList) {
             ((javafx.collections.transformation.SortedList<Song>) items).comparatorProperty().bind(table.comparatorProperty());
         }
-        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
         table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         TableColumn<Song, String> titleCol = new TableColumn<>("歌名");
@@ -692,7 +695,9 @@ public class MusicView extends BorderPane {
             }
         });
 
-        table.getColumns().addAll(titleCol, artistCol, formatCol, durationCol, actionCol);
+        @SuppressWarnings("unchecked")
+        TableColumn<Song, ?>[] cols = new TableColumn[] { titleCol, artistCol, formatCol, durationCol, actionCol };
+        table.getColumns().addAll(cols);
         titleCol.setSortType(TableColumn.SortType.DESCENDING);
         table.getSortOrder().add(titleCol);
 
@@ -711,7 +716,7 @@ public class MusicView extends BorderPane {
         TableView<Song> table = new TableView<>();
         table.getStyleClass().add("app-table-view");
         table.setItems(viewModel.getOnlineSongs());
-        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
         table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         TableColumn<Song, String> titleCol = new TableColumn<>("歌名");
@@ -812,7 +817,9 @@ public class MusicView extends BorderPane {
             }
         });
 
-        table.getColumns().addAll(titleCol, artistCol, sourceCol, formatCol, durationCol, actionCol);
+        @SuppressWarnings("unchecked")
+        TableColumn<Song, ?>[] cols = new TableColumn[] { titleCol, artistCol, sourceCol, formatCol, durationCol, actionCol };
+        table.getColumns().addAll(cols);
         titleCol.setSortType(TableColumn.SortType.DESCENDING);
         table.getSortOrder().add(titleCol);
 
@@ -967,11 +974,14 @@ public class MusicView extends BorderPane {
      * @param playlistIdRef 曲笺 ID 引用（非空时显示移除按钮）
      */
     private class SongDetailCell extends ListCell<Song> {
-        private final HBox cell = new HBox(8);
+        private final HBox cell = new HBox(12);
+        private final Label playIcon = new Label("\u25B6");
+        private final VBox textArea = new VBox(2);
         private final Label titleLabel = new Label();
         private final Label artistLabel = new Label();
+        private final Label durationLabel = new Label();
         private final Label formatBadge = new Label();
-        private final Label favLabel = new Label("\u2665"); // ♥
+        private final Label favLabel = new Label("\u2665");
         private final Label removeLabel = new Label("x");
         private final boolean showFavorite;
         private final int[] playlistIdRef;
@@ -983,12 +993,15 @@ public class MusicView extends BorderPane {
         SongDetailCell(boolean showFavorite, int[] playlistIdRef) {
             this.showFavorite = showFavorite;
             this.playlistIdRef = playlistIdRef;
-            titleLabel.setStyle("-fx-font-size: 13px; -fx-text-fill: -text-primary;");
+            playIcon.setPrefWidth(20);
+            playIcon.setStyle("-fx-font-size: 10px; -fx-text-fill: -primary; -fx-alignment: center;");
+            titleLabel.setStyle("-fx-font-size: 13px; -fx-text-fill: -text-primary; -fx-font-weight: 500;");
             artistLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: -text-secondary;");
-            formatBadge.setStyle("-fx-font-size: 10px; -fx-text-fill: -text-tertiary; -fx-padding: 1 5; -fx-background-color: -bg-tertiary; -fx-background-radius: 4;");
-            favLabel.setStyle("-fx-font-size: 13px; -fx-text-fill: #ef4444; -fx-cursor: hand; -fx-padding: 0 4; -fx-alignment: center-right;");
-            favLabel.setOnMouseEntered(e -> favLabel.setStyle("-fx-font-size: 15px; -fx-text-fill: #dc2626; -fx-cursor: hand; -fx-padding: 0 4; -fx-alignment: center-right;"));
-            favLabel.setOnMouseExited(e -> favLabel.setStyle("-fx-font-size: 13px; -fx-text-fill: #ef4444; -fx-cursor: hand; -fx-padding: 0 4; -fx-alignment: center-right;"));
+            durationLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: -text-tertiary;");
+            formatBadge.setStyle("-fx-font-size: 10px; -fx-text-fill: -text-tertiary; -fx-padding: 1 6; -fx-background-color: -bg-tertiary; -fx-background-radius: 4;");
+            favLabel.setStyle("-fx-font-size: 13px; -fx-text-fill: #ef4444; -fx-cursor: hand; -fx-padding: 0 6; -fx-alignment: center-right;");
+            favLabel.setOnMouseEntered(e -> favLabel.setStyle("-fx-font-size: 15px; -fx-text-fill: #dc2626; -fx-cursor: hand; -fx-padding: 0 6; -fx-alignment: center-right;"));
+            favLabel.setOnMouseExited(e -> favLabel.setStyle("-fx-font-size: 13px; -fx-text-fill: #ef4444; -fx-cursor: hand; -fx-padding: 0 6; -fx-alignment: center-right;"));
             favLabel.setOnMousePressed(e -> {
                 e.consume();
                 Song song = SongDetailCell.this.getItem();
@@ -997,10 +1010,9 @@ public class MusicView extends BorderPane {
                     viewModel.loadFavoriteSongs();
                 }
             });
-            // 移除按钮（曲笺歌曲）
-            removeLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: -text-tertiary; -fx-cursor: hand; -fx-padding: 0 4; -fx-alignment: center-right;");
-            removeLabel.setOnMouseEntered(e -> removeLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: #ef4444; -fx-cursor: hand; -fx-padding: 0 4; -fx-alignment: center-right;"));
-            removeLabel.setOnMouseExited(e -> removeLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: -text-tertiary; -fx-cursor: hand; -fx-padding: 0 4; -fx-alignment: center-right;"));
+            removeLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: -text-tertiary; -fx-cursor: hand; -fx-padding: 0 6; -fx-alignment: center-right;");
+            removeLabel.setOnMouseEntered(e -> removeLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #ef4444; -fx-cursor: hand; -fx-padding: 0 6; -fx-alignment: center-right;"));
+            removeLabel.setOnMouseExited(e -> removeLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: -text-tertiary; -fx-cursor: hand; -fx-padding: 0 6; -fx-alignment: center-right;"));
             removeLabel.setOnMousePressed(e -> {
                 e.consume();
                 Song song = SongDetailCell.this.getItem();
@@ -1008,18 +1020,16 @@ public class MusicView extends BorderPane {
                     viewModel.removeSongFromPlaylist(playlistIdRef[0], song);
                 }
             });
-            HBox.setHgrow(titleLabel, Priority.ALWAYS);
+            HBox.setHgrow(textArea, Priority.ALWAYS);
+            textArea.getChildren().addAll(titleLabel, artistLabel);
             cell.setAlignment(Pos.CENTER_LEFT);
-            cell.setPadding(new Insets(6, 4, 6, 4));
-            // 根据模式组装子节点
-            if (showFavorite && playlistIdRef == null) {
-                // 藏音：显示收藏按钮
-                cell.getChildren().addAll(titleLabel, artistLabel, formatBadge, favLabel);
-            } else if (playlistIdRef != null) {
-                // 曲笺：显示移除按钮
-                cell.getChildren().addAll(titleLabel, artistLabel, formatBadge, removeLabel);
+            cell.setPadding(new Insets(8, 6, 8, 6));
+            if (this.showFavorite && this.playlistIdRef == null) {
+                cell.getChildren().addAll(playIcon, textArea, durationLabel, formatBadge, favLabel);
+            } else if (this.playlistIdRef != null) {
+                cell.getChildren().addAll(playIcon, textArea, durationLabel, formatBadge, removeLabel);
             } else {
-                cell.getChildren().addAll(titleLabel, artistLabel, formatBadge);
+                cell.getChildren().addAll(playIcon, textArea, durationLabel, formatBadge);
             }
             setOnMouseClicked(e -> {
                 if (e.getClickCount() == 2 && !isEmpty()) {
@@ -1035,6 +1045,7 @@ public class MusicView extends BorderPane {
             if (empty || song == null) { setGraphic(null); return; }
             titleLabel.setText(song.getDisplayTitle());
             artistLabel.setText(song.getDisplayArtist());
+            durationLabel.setText(song.getDurationText());
             formatBadge.setText(song.getFormatLabel());
             setGraphic(cell);
         }

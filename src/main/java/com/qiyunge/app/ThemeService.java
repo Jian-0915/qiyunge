@@ -10,9 +10,8 @@ public class ThemeService {
 
     public enum Theme {
         MORNING("晨雾", "morning"),
-        FOREST("松林", "forest"),
-        DUSK("暮色", "dusk"),
-        MOON("月白", "moon");
+        BAMBOO("竹林", "bamboo"),
+        DUSK("暮色", "dusk");
 
         private final String displayName;
         private final String cssClass;

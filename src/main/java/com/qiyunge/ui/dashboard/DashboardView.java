@@ -3,7 +3,6 @@ package com.qiyunge.ui.dashboard;
 import com.qiyunge.app.AppContext;
 import com.qiyunge.app.NavigationService;
 import com.qiyunge.ui.components.*;
-import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -55,7 +54,26 @@ public class DashboardView extends VBox {
 
         middleRow.getChildren().addAll(leftCol, rightCol);
 
-        this.getChildren().addAll(greetingCard, shortcutsRow, statsRow, middleRow);
+        this.getChildren().addAll(createPageHeader(), greetingCard, shortcutsRow, statsRow, middleRow);
+    }
+
+    // ========== 页面标题区 ==========
+    private HBox createPageHeader() {
+        HBox header = new HBox();
+        header.setAlignment(Pos.CENTER_LEFT);
+
+        Label titleLabel = new Label("云上总览");
+        titleLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: 700; -fx-text-fill: -text-primary;");
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        Label subtitleLabel = new Label();
+        subtitleLabel.textProperty().bind(viewModel.welcomeBackProperty());
+        subtitleLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: -text-secondary;");
+
+        header.getChildren().addAll(titleLabel, spacer, subtitleLabel);
+        return header;
     }
 
     // ========== 云上问候 ==========
@@ -90,20 +108,25 @@ public class DashboardView extends VBox {
         return row;
     }
 
-    private VBox createShortcut(String icon, String label, NavigationService.Page page) {
-        VBox card = new VBox(8);
-        card.setAlignment(Pos.CENTER);
-        card.setPadding(new Insets(16, 20, 16, 20));
+    private HBox createShortcut(String icon, String label, NavigationService.Page page) {
+        HBox card = new HBox(10);
+        card.setAlignment(Pos.CENTER_LEFT);
+        card.setPadding(new Insets(12, 16, 12, 16));
+        HBox.setHgrow(card, Priority.ALWAYS);
         card.setStyle("-fx-background-color: -bg-card; -fx-background-radius: 12px; -fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.04), 4, 0, 0, 1);");
-        card.setOnMouseEntered(e -> card.setStyle(card.getStyle().replace("-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.04), 4, 0, 0, 1)", "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 2)")));
-        card.setOnMouseExited(e -> card.setStyle(card.getStyle().replace("-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 2)", "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.04), 4, 0, 0, 1)")));
+        String baseStyle = card.getStyle();
+        String hoverStyle = "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 2); -fx-translate-y: -1px;";
+        card.setOnMouseEntered(e -> card.setStyle(baseStyle + hoverStyle));
+        card.setOnMouseExited(e -> card.setStyle(baseStyle));
         card.setOnMouseClicked(e -> appContext.getNavigationService().navigateTo(page));
 
         Label iconLabel = new Label(icon);
-        iconLabel.setStyle("-fx-font-size: 22px;");
+        iconLabel.setAlignment(Pos.CENTER);
+        iconLabel.setPrefSize(32, 32);
+        iconLabel.setStyle("-fx-background-color: -primary; -fx-background-radius: 8px; -fx-text-fill: -primary-text; -fx-font-size: 16px;");
 
         Label textLabel = new Label(label);
-        textLabel.setStyle("-fx-font-size: 12px; -fx-font-weight: 600; -fx-text-fill: -text-primary;");
+        textLabel.setStyle("-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: -text-primary;");
 
         card.getChildren().addAll(iconLabel, textLabel);
         return card;

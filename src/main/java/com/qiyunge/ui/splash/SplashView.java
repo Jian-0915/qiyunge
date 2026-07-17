@@ -2,11 +2,9 @@ package com.qiyunge.ui.splash;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 
 public class SplashView extends BorderPane {
 

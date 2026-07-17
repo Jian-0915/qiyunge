@@ -38,7 +38,6 @@ public class LyricPane extends StackPane {
     private final javafx.scene.control.ProgressBar progressIndicator = new javafx.scene.control.ProgressBar(0);
 
     private int currentIndex = -1;
-    private boolean isLoading = false;
     private SeekCallback seekCallback;
 
     public LyricPane() {
@@ -154,7 +153,6 @@ public class LyricPane extends StackPane {
             if (lines != null) {
                 lyrics.addAll(lines);
             }
-            isLoading = false;
             loadingState.setVisible(false);
             loadingState.setManaged(false);
             currentIndex = -1;
@@ -163,7 +161,6 @@ public class LyricPane extends StackPane {
     }
 
     public void showLoading() {
-        isLoading = true;
         Platform.runLater(() -> {
             lyrics.clear();
             lyricsContainer.getChildren().clear();
@@ -290,7 +287,6 @@ public class LyricPane extends StackPane {
         Platform.runLater(() -> {
             lyrics.clear();
             currentIndex = -1;
-            isLoading = false;
             loadingState.setVisible(false);
             loadingState.setManaged(false);
             lyricsContainer.getChildren().clear();

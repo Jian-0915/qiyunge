@@ -1,7 +1,6 @@
 package com.qiyunge.ui.music;
 
 import com.qiyunge.ui.components.ItemDialog;
-import javafx.scene.control.ButtonType;
 
 /**
  * 新建/编辑曲笺对话框。

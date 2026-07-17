@@ -1,6 +1,5 @@
 package com.qiyunge.ui.components;
 
-import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 

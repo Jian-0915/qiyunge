@@ -41,6 +41,7 @@ public class LoginView extends BorderPane {
     private Label gateMessage;
     private double dragOffsetX;
     private double dragOffsetY;
+    private boolean wasMaximized = false;
 
     // Face login panel elements
     private VBox passwordForm;
@@ -711,13 +712,21 @@ public class LoginView extends BorderPane {
 
     private void onWindowDragPressed(MouseEvent event) {
         Stage stage = appContext.getPrimaryStage();
+        wasMaximized = stage.isMaximized();
         dragOffsetX = event.getScreenX() - stage.getX();
         dragOffsetY = event.getScreenY() - stage.getY();
     }
 
     private void onWindowDragged(MouseEvent event) {
         Stage stage = appContext.getPrimaryStage();
-        if (stage.isMaximized()) {
+        if (wasMaximized) {
+            stage.setMaximized(false);
+            // Center the window on the cursor position
+            double newX = event.getScreenX() - stage.getWidth() / 2;
+            double newY = event.getScreenY() - dragOffsetY;
+            stage.setX(newX);
+            stage.setY(newY);
+            wasMaximized = false;
             return;
         }
         stage.setX(event.getScreenX() - dragOffsetX);

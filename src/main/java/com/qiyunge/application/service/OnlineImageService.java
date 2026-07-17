@@ -153,10 +153,6 @@ public class OnlineImageService {
         cache.put(cacheKey, new CacheEntry(new ArrayList<>(results), System.currentTimeMillis()));
     }
 
-    private ProviderSearchResult searchProvider(ImageProvider provider, String keyword) {
-        return searchProviderWithPage(provider, keyword, 1);
-    }
-
     private ProviderSearchResult searchProviderWithPage(ImageProvider provider, String keyword, int page) {
         try {
             return new ProviderSearchResult(provider, provider.search(keyword, page, 20), null);

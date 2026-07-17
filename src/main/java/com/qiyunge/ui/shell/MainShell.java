@@ -3,10 +3,10 @@ package com.qiyunge.ui.shell;
 import com.qiyunge.app.AppContext;
 import com.qiyunge.app.NavigationService;
 import com.qiyunge.app.UserSession;
-import com.qiyunge.application.service.MusicPlayerService;
 import com.qiyunge.domain.entity.Song;
 import com.qiyunge.ui.components.LyricPane;
 import com.qiyunge.ui.components.MusicBar;
+import com.qiyunge.ui.components.PoeticCalendar;
 import com.qiyunge.ui.components.SideNavItem;
 import com.qiyunge.ui.components.UserAvatar;
 import com.qiyunge.ui.components.WindowTitleBar;
@@ -26,10 +26,19 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 
 public class MainShell extends BorderPane {
+
+    private static final java.util.Map<NavigationService.Page, String> PAGE_TITLES = java.util.Map.of(
+        NavigationService.Page.DASHBOARD, "望云台",
+        NavigationService.Page.MUSIC, "听雨轩",
+        NavigationService.Page.GALLERY, "拾光廊",
+        NavigationService.Page.ENTERTAINMENT, "闲云馆",
+        NavigationService.Page.PROFILE, "吾庐",
+        NavigationService.Page.ADMIN, "阁务司",
+        NavigationService.Page.SETTINGS, "云枢"
+    );
 
     private final AppContext appContext;
     private final NavigationService navigationService;
@@ -47,7 +56,6 @@ public class MainShell extends BorderPane {
     private boolean queueVisible = false;
     private boolean lyricVisible = false;
     private MusicViewModel musicViewModel;
-    private MusicView currentMusicView;
 
     public MainShell(AppContext appContext) {
         this.appContext = appContext;
@@ -106,10 +114,19 @@ public class MainShell extends BorderPane {
         this.setCenter(centerArea);
         this.setBottom(musicBar);
         this.getStyleClass().add("main-shell");
+        this.setStyle("-fx-background-color: transparent;");
+
+        Region bgImage = new Region();
+        bgImage.getStyleClass().add("bg-image-layer");
+        bgImage.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+
+        Region bgOverlay = new Region();
+        bgOverlay.getStyleClass().add("bg-overlay-layer");
+        bgOverlay.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
         queueOverlay = createQueueOverlay();
         lyricOverlay = createLyricOverlay();
-        shellRoot = new StackPane(this, queueOverlay, lyricOverlay);
+        shellRoot = new StackPane(bgImage, bgOverlay, this, queueOverlay, lyricOverlay);
         StackPane.setAlignment(queueOverlay, Pos.BOTTOM_RIGHT);
         StackPane.setMargin(queueOverlay, new Insets(0, 24, 84, 0));
         queueOverlay.setVisible(false);
@@ -177,10 +194,7 @@ public class MainShell extends BorderPane {
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        TextField searchField = new TextField();
-        searchField.setPromptText("搜索...");
-        searchField.getStyleClass().add("search-box");
-        searchField.setPrefWidth(240);
+        PoeticCalendar poeticCalendar = new PoeticCalendar();
 
         // User avatar + name (bound to session)
         HBox userBox = new HBox(8);
@@ -193,7 +207,7 @@ public class MainShell extends BorderPane {
         userLabel.setStyle("-fx-font-size: 13px; -fx-text-fill: -text-secondary;");
         userBox.getChildren().addAll(userAvatar, userLabel);
 
-        topBar.getChildren().addAll(titleGroup, spacer, searchField, userBox);
+        topBar.getChildren().addAll(titleGroup, spacer, poeticCalendar, userBox);
         return topBar;
     }
 
@@ -214,7 +228,7 @@ public class MainShell extends BorderPane {
             createNavItem("望云台", "dashboard", NavigationService.Page.DASHBOARD),
             createNavItem("听雨轩", "music", NavigationService.Page.MUSIC),
             createNavItem("拾光廊", "gallery", NavigationService.Page.GALLERY),
-            createNavItem("百趣园", "entertainment", NavigationService.Page.ENTERTAINMENT),
+            createNavItem("闲云馆", "entertainment", NavigationService.Page.ENTERTAINMENT),
             createNavItem("吾庐", "profile", NavigationService.Page.PROFILE)
         );
 
@@ -251,8 +265,8 @@ public class MainShell extends BorderPane {
     }
 
     private void updatePageTitle(NavigationService.Page page) {
-        String[] titles = {"望云台", "听雨轩", "拾光廊", "百趣园", "吾庐", "阁务司", "云枢"};
-        pageTitleLabel.setText(titles[page.ordinal()]);
+        String title = PAGE_TITLES.getOrDefault(page, "栖云阁");
+        pageTitleLabel.setText(title);
     }
 
     private void updateNavHighlight(NavigationService.Page page) {
@@ -273,7 +287,6 @@ public class MainShell extends BorderPane {
         navigationService.registerPage(NavigationService.Page.DASHBOARD, () -> wrapPage(new DashboardView(appContext)));
         navigationService.registerPage(NavigationService.Page.MUSIC, () -> {
             MusicView mv = new MusicView(appContext, musicBar);
-            currentMusicView = mv;
             return wrapPage(mv);
         });
         navigationService.registerPage(NavigationService.Page.GALLERY, () -> wrapPage(new GalleryView(appContext)));

@@ -21,7 +21,6 @@ public class MusicProviderRegistry {
     public static class ProviderState {
         private boolean enabled = true;
         private int priority = 100;
-        private volatile Instant lastFailureTime;
         private volatile Instant cooldownUntil;
         private final java.util.concurrent.atomic.AtomicInteger failureCount = new java.util.concurrent.atomic.AtomicInteger(0);
         private static final long COOLDOWN_BASE_MS = 30_000; // 基础冷却 30 秒
@@ -37,7 +36,6 @@ public class MusicProviderRegistry {
         /** 记录失败，增加冷却时间 */
         public void recordFailure() {
             int count = failureCount.incrementAndGet();
-            lastFailureTime = Instant.now();
             long cooldownMs = Math.min(COOLDOWN_BASE_MS * (1L << Math.min(count - 1, 6)), COOLDOWN_MAX_MS);
             cooldownUntil = Instant.now().plusMillis(cooldownMs);
         }

@@ -22,6 +22,7 @@ public class AppLauncher extends Application {
 
     private Stage primaryStage;
     private AppContext appContext;
+    private PrintStream logStream;
 
     @Override
     public void init() {
@@ -49,7 +50,7 @@ public class AppLauncher extends Application {
 
             // 追加模式，保留历史启动日志
             FileOutputStream fos = new FileOutputStream(logFile.toFile(), true);
-            PrintStream logStream = new PrintStream(fos, true);
+            logStream = new PrintStream(fos, true);
 
             // 时间戳分隔线
             logStream.println("\n========== 栖云阁启动 " +
@@ -243,6 +244,9 @@ public class AppLauncher extends Application {
     public void stop() {
         if (appContext != null) {
             appContext.shutdown();
+        }
+        if (logStream != null) {
+            logStream.close();
         }
         Platform.exit();
     }

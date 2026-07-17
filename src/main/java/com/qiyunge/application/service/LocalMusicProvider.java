@@ -12,10 +12,7 @@ import java.util.Optional;
  */
 public class LocalMusicProvider implements MusicProvider {
 
-    private final MusicService musicService;
-
     public LocalMusicProvider(MusicService musicService) {
-        this.musicService = musicService;
     }
 
     @Override

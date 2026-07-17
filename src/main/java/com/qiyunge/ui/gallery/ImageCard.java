@@ -72,7 +72,7 @@ public class ImageCard extends StackPane {
             e.consume();
             image.setFavorited(!image.isFavorited());
             updateFavoriteIcon();
-            if (onFavoriteCallback != null) onFavoriteCallback.run();
+            if (this.onFavoriteCallback != null) this.onFavoriteCallback.run();
         });
 
         // 底部信息

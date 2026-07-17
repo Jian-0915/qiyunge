@@ -3,6 +3,8 @@ package com.qiyunge.app;
 import com.qiyunge.domain.entity.User;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
 
 public class UserSession {
@@ -18,9 +20,9 @@ public class UserSession {
     private volatile LocalDateTime loginTime;
     private volatile boolean loggedIn = false;
 
-    private volatile Consumer<String> onDisplayNameChanged;
+    private final List<Consumer<String>> displayNameListeners = new CopyOnWriteArrayList<>();
 
-    public void login(User user) {
+    public synchronized void login(User user) {
         this.userId = user.getId();
         this.username = user.getUsername();
         this.displayName = user.getDisplayTitle();
@@ -33,7 +35,7 @@ public class UserSession {
         this.loggedIn = true;
     }
 
-    public void logout() {
+    public synchronized void logout() {
         this.userId = -1;
         this.username = null;
         this.displayName = null;
@@ -62,14 +64,18 @@ public class UserSession {
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
-        if (onDisplayNameChanged != null) {
-            onDisplayNameChanged.accept(displayName);
-        }
+        notifyDisplayNameChanged(displayName);
     }
 
     public void setAvatarColor(String avatarColor) { this.avatarColor = avatarColor; }
 
     public void addDisplayNameListener(Consumer<String> listener) {
-        this.onDisplayNameChanged = listener;
+        this.displayNameListeners.add(listener);
+    }
+
+    private void notifyDisplayNameChanged(String newName) {
+        for (Consumer<String> listener : displayNameListeners) {
+            listener.accept(newName);
+        }
     }
 }

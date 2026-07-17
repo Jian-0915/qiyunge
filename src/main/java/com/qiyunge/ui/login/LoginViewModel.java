@@ -2,7 +2,6 @@ package com.qiyunge.ui.login;
 
 import com.qiyunge.app.AppContext;
 import com.qiyunge.application.auth.AuthService;
-import com.qiyunge.application.face.FaceRecognitionService;
 import com.qiyunge.application.service.AsyncExecutor;
 import com.qiyunge.domain.model.LoginResult;
 import javafx.application.Platform;

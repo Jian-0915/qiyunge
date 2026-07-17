@@ -1,7 +1,6 @@
 package com.qiyunge.ui.components;
 
 import com.qiyunge.app.ThemeService;
-import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -25,9 +24,8 @@ public class ThemeSelector extends HBox {
             // Set different colors for each theme
             String color = switch (theme) {
                 case MORNING -> "#5B8DEF";
-                case FOREST -> "#2D8B56";
+                case BAMBOO -> "#2D8B56";
                 case DUSK -> "#A78BFA";
-                case MOON -> "#6366F1";
             };
             colorDot.setStyle("-fx-background-color: " + color + "; -fx-background-radius: 50%;");
 

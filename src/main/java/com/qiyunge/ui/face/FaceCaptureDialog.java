@@ -15,7 +15,6 @@ import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import org.bytedeco.opencv.global.opencv_imgproc;
 import org.bytedeco.opencv.opencv_core.Mat;
 import org.bytedeco.opencv.opencv_core.Rect;
 
@@ -71,6 +70,11 @@ public class FaceCaptureDialog extends Stage {
         setScene(scene);
 
         centerOnScreen();
+
+        setOnCloseRequest(e -> {
+            e.consume();
+            closeDialog();
+        });
     }
 
     private VBox createUI() {

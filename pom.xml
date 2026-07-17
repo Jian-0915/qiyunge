@@ -136,12 +136,6 @@
             <version>1.5.9</version>
             <classifier>windows-x86_64</classifier>
         </dependency>
-        <!-- Webcam Capture: lightweight camera access, faster than OpenCV VideoCapture -->
-        <dependency>
-            <groupId>com.github.sarxos</groupId>
-            <artifactId>webcam-capture</artifactId>
-            <version>0.3.12</version>
-        </dependency>
     </dependencies>
 
     <build>
