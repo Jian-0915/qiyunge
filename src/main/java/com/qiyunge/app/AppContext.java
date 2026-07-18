@@ -7,6 +7,7 @@ import com.qiyunge.application.service.AsyncExecutor;
 import com.qiyunge.application.service.AuditLogService;
 import com.qiyunge.application.service.GalleryService;
 import com.qiyunge.application.service.EntertainmentService;
+import com.qiyunge.application.service.PomodoroService;
 import com.qiyunge.application.service.ImageProvider;
 import com.qiyunge.application.service.JamendoProvider;
 import com.qiyunge.application.service.LocalMusicProvider;
@@ -33,6 +34,10 @@ import com.qiyunge.infrastructure.repository.GalleryImageRepository;
 import com.qiyunge.infrastructure.repository.ImageAlbumItemRepository;
 import com.qiyunge.infrastructure.repository.GameRecordRepository;
 import com.qiyunge.infrastructure.repository.ImageAlbumRepository;
+import com.qiyunge.infrastructure.repository.PomodoroSessionRepository;
+import com.qiyunge.infrastructure.repository.PomodoroTaskRepository;
+import com.qiyunge.infrastructure.repository.PomodoroTaskTemplateRepository;
+import com.qiyunge.infrastructure.repository.AchievementRepository;
 import com.qiyunge.infrastructure.repository.UserImagePreferenceRepository;
 import com.qiyunge.application.service.PlaylistService;
 import com.qiyunge.infrastructure.repository.PlaylistRepository;
@@ -69,6 +74,10 @@ public class AppContext {
     private ImageAlbumRepository imageAlbumRepository;
     private ImageAlbumItemRepository imageAlbumItemRepository;
     private GameRecordRepository gameRecordRepository;
+    private PomodoroSessionRepository pomodoroSessionRepository;
+    private PomodoroTaskRepository pomodoroTaskRepository;
+    private PomodoroTaskTemplateRepository pomodoroTaskTemplateRepository;
+    private AchievementRepository achievementRepository;
 
     // Services
     private UserService userService;
@@ -88,6 +97,7 @@ public class AppContext {
     private GalleryService galleryService;
     private OnlineImageService onlineImageService;
     private EntertainmentService entertainmentService;
+    private PomodoroService pomodoroService;
 
     private UserSession userSession;
 
@@ -136,6 +146,10 @@ public class AppContext {
         imageAlbumRepository = new ImageAlbumRepository(databaseManager);
         imageAlbumItemRepository = new ImageAlbumItemRepository(databaseManager);
         gameRecordRepository = new GameRecordRepository(databaseManager);
+        pomodoroSessionRepository = new PomodoroSessionRepository(databaseManager);
+        pomodoroTaskRepository = new PomodoroTaskRepository(databaseManager);
+        pomodoroTaskTemplateRepository = new PomodoroTaskTemplateRepository(databaseManager);
+        achievementRepository = new AchievementRepository(databaseManager);
         System.out.println("[INIT] 3. 数据仓库初始化: " + (System.currentTimeMillis() - t2) + "ms");
 
         // 3. 核心服务
@@ -187,6 +201,7 @@ public class AppContext {
 
         // 娱乐服务
         entertainmentService = new EntertainmentService(gameRecordRepository);
+        pomodoroService = new PomodoroService(pomodoroSessionRepository, pomodoroTaskRepository, pomodoroTaskTemplateRepository, achievementRepository, configStorage);
         System.out.println("[INIT] 7.5 娱乐服务初始化完成");
         System.out.println("[INIT] 7. 图库服务初始化: " + (System.currentTimeMillis() - t6) + "ms");
 
@@ -335,6 +350,11 @@ public class AppContext {
     public EntertainmentService getEntertainmentService() {
         if (entertainmentService == null) throw new IllegalStateException("AppContext not initialized");
         return entertainmentService;
+    }
+
+    public PomodoroService getPomodoroService() {
+        if (pomodoroService == null) throw new IllegalStateException("AppContext not initialized");
+        return pomodoroService;
     }
 
     public FaceRecognitionService getFaceRecognitionService() { return faceRecognitionService; }

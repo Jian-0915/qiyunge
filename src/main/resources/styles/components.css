@@ -304,8 +304,235 @@
 
 /* --- 确认对话框 --- */
 .app-dialog {
-    -fx-background-color: -bg-card;
+    -fx-background-color: -bg-card-solid;
     -fx-background-radius: 16px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 60, 0, 0, 20);
+}
+
+/* --- 通用对话框样式 --- */
+.dialog-pane {
+    -fx-background-color: transparent;
+    -fx-background-radius: 16px;
+}
+.dialog-pane > .content {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+.dialog-pane > .header-panel {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+.dialog-pane > .button-bar {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+.dialog-pane > .button-bar > .container {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+/* --- 自定义对话框（完全隐藏默认 header 和 button bar） --- */
+.dialog-pane.custom-dialog > .header-panel {
+    -fx-pref-height: 0;
+    -fx-max-height: 0;
+    -fx-min-height: 0;
+    -fx-opacity: 0;
+    -fx-padding: 0;
+}
+.dialog-pane.custom-dialog > .button-bar {
+    -fx-pref-height: 0;
+    -fx-max-height: 0;
+    -fx-min-height: 0;
+    -fx-opacity: 0;
+    -fx-padding: 0;
+}
+.dialog-pane.custom-dialog > .button-bar > .container {
+    -fx-pref-height: 0;
+    -fx-max-height: 0;
+    -fx-min-height: 0;
+    -fx-opacity: 0;
+    -fx-padding: 0;
+}
+
+/* --- 对话框卡片容器 --- */
+.dialog-card {
+    -fx-background-color: -bg-card-solid;
+    -fx-background-radius: 16px;
+    -fx-border-radius: 16px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 25, 0, 0, 8),
+                dropshadow(gaussian, rgba(0,0,0,0.12), 8, 0, 0, 2);
+}
+
+/* --- 对话框标题分隔线 --- */
+.dialog-divider {
+    -fx-background-color: -border-light;
+    -fx-min-height: 1;
+    -fx-pref-height: 1;
+    -fx-max-height: 1;
+}
+
+/* --- 设置行 --- */
+.setting-row {
+    -fx-spacing: 12;
+    -fx-padding: 12 0 12 0;
+    -fx-border-color: transparent transparent -border-light transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+/* --- 分组标签 --- */
+.section-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+    -fx-text-fill: -text-tertiary;
+    -fx-padding: 8 0 4 0;
+}
+
+/* --- 表单输入框 --- */
+.form-input {
+    -fx-background-color: -bg-input;
+    -fx-background-radius: 10px;
+    -fx-border-color: -border;
+    -fx-border-radius: 10px;
+    -fx-border-width: 1px;
+    -fx-pref-height: 38px;
+    -fx-min-height: 38px;
+    -fx-max-height: 38px;
+    -fx-padding: 0 12px;
+    -fx-font-size: 14px;
+    -fx-text-fill: -text-primary;
+}
+.form-input:focused {
+    -fx-border-color: -primary;
+    -fx-effect: dropshadow(gaussian, rgba(91,141,239,0.15), 3, 0, 0, 0);
+}
+
+/* --- 表单选择框 --- */
+.form-select {
+    -fx-background-color: -bg-input;
+    -fx-background-radius: 10px;
+    -fx-border-color: -border;
+    -fx-border-radius: 10px;
+    -fx-border-width: 1px;
+    -fx-pref-height: 38px;
+    -fx-min-height: 38px;
+    -fx-max-height: 38px;
+    -fx-font-size: 14px;
+    -fx-text-fill: -text-primary;
+    -fx-effect: null;
+    -fx-background-insets: 0;
+}
+.form-select > .label {
+    -fx-text-fill: -text-primary;
+    -fx-padding: 0 12px;
+}
+.form-select > .arrow-button {
+    -fx-padding: 0 12px;
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-effect: null;
+}
+.form-select > .arrow-button > .arrow {
+    -fx-background-color: -text-tertiary;
+}
+
+/* --- 表单 Spinner --- */
+.form-spinner {
+    -fx-background-color: -bg-input;
+    -fx-background-radius: 10px;
+    -fx-border-color: -border;
+    -fx-border-radius: 10px;
+    -fx-border-width: 1px;
+    -fx-pref-height: 38px;
+    -fx-min-height: 38px;
+    -fx-max-height: 38px;
+    -fx-effect: null;
+}
+.form-spinner .text-field {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-pref-height: 36px;
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+    -fx-text-fill: -text-primary;
+    -fx-alignment: center;
+    -fx-effect: null;
+    -fx-background-insets: 0;
+}
+.form-spinner .increment-arrow-button,
+.form-spinner .decrement-arrow-button {
+    -fx-background-color: transparent;
+    -fx-pref-width: 32px;
+    -fx-cursor: hand;
+    -fx-effect: null;
+    -fx-background-insets: 0;
+}
+.form-spinner .increment-arrow-button:hover,
+.form-spinner .decrement-arrow-button:hover {
+    -fx-background-color: -primary-light;
+}
+.form-spinner .increment-arrow,
+.form-spinner .decrement-arrow {
+    -fx-background-color: -text-secondary;
+}
+
+/* --- 复选框 --- */
+.form-checkbox {
+    -fx-text-fill: -text-primary;
+    -fx-font-size: 13px;
+}
+.form-checkbox .box {
+    -fx-background-color: transparent;
+    -fx-background-radius: 4px;
+    -fx-border-color: -border;
+    -fx-border-radius: 4px;
+    -fx-border-width: 2px;
+    -fx-pref-width: 18px;
+    -fx-pref-height: 18px;
+    -fx-padding: 0;
+}
+.form-checkbox:selected .box {
+    -fx-background-color: -primary;
+    -fx-border-color: -primary;
+}
+.form-checkbox:selected .mark {
+    -fx-background-color: -primary-text;
+    -fx-shape: "M2 12.5l3.5 3.5L14.5 7";
+    -fx-stroke: -primary-text;
+    -fx-stroke-width: 2;
+}
+
+/* --- 主按钮 --- */
+.btn-primary {
+    -fx-background-color: -primary;
+    -fx-text-fill: -primary-text;
+    -fx-background-radius: 10px;
+    -fx-padding: 8px 20px;
+    -fx-font-size: 13px;
+    -fx-font-weight: 500;
+    -fx-cursor: hand;
+    -fx-border-width: 0;
+}
+.btn-primary:hover {
+    -fx-background-color: derive(-primary, -10%);
+}
+
+/* --- 次按钮（边框） --- */
+.btn-ghost {
+    -fx-background-color: transparent;
+    -fx-text-fill: -text-primary;
+    -fx-background-radius: 10px;
+    -fx-border-color: -border;
+    -fx-border-radius: 10px;
+    -fx-border-width: 1px;
+    -fx-padding: 8px 20px;
+    -fx-font-size: 13px;
+    -fx-font-weight: 500;
+    -fx-cursor: hand;
+}
+.btn-ghost:hover {
+    -fx-background-color: -bg-hover;
 }
 
 /* --- 侧边导航项 --- */

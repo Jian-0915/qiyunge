@@ -31,6 +31,7 @@ public class MusicView extends BorderPane {
     private final AppContext appContext;
     private final MusicViewModel viewModel;
     private final VBox contentArea;
+    private final ScrollPane contentScrollPane;
 
     // 播放队列面板
     private final ListView<Song> queueListView;
@@ -58,6 +59,15 @@ public class MusicView extends BorderPane {
         contentArea = new VBox(8);
         contentArea.setPadding(new Insets(16));
         contentArea.setStyle("-fx-background-color: -bg-primary;");
+        VBox.setVgrow(contentArea, Priority.ALWAYS);
+
+        contentScrollPane = new ScrollPane(contentArea);
+        contentScrollPane.setFitToWidth(true);
+        contentScrollPane.setFitToHeight(true);
+        contentScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        contentScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        contentScrollPane.setStyle("-fx-background-color: transparent; -fx-background: transparent;");
+        contentScrollPane.getStyleClass().add("page-scroll");
 
         // 歌词面板
         lyricPane.setPadding(new Insets(0));
@@ -71,8 +81,8 @@ public class MusicView extends BorderPane {
 
         // 主内容 + 歌词面板 水平布局
         HBox mainContent = new HBox(0);
-        HBox.setHgrow(contentArea, Priority.ALWAYS);
-        mainContent.getChildren().addAll(contentArea, lyricPanelWrapper);
+        HBox.setHgrow(contentScrollPane, Priority.ALWAYS);
+        mainContent.getChildren().addAll(contentScrollPane, lyricPanelWrapper);
         setCenter(mainContent);
 
 

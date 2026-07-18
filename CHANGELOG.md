@@ -4,6 +4,67 @@
 
 ---
 
+## [v1.2.0] - 2026-07-19
+
+### ✨ 新增功能
+
+#### 专注计时（番茄钟/Pomodoro）模块
+- **专注/休息循环计时**：支持专注（默认25分钟）、短休息（5分钟）、长休息（15分钟）三种模式
+- **自定义时长**：可自由配置专注、短休息、长休息时长及长休息间隔
+- **自动开始下一轮**：可选自动进入下一个计时周期
+- **窗口置顶**：计时窗口可设置始终置顶
+- **提示音设置**：多种提示音类型及音量调节
+- **音乐联动**：专注/休息时可联动音乐播放（暂停/继续/切换），支持分别设置专注和休息时的音量
+- **专注歌单**：可指定专注时播放的歌单
+
+#### 番茄钟任务管理
+- **任务创建与排序**：支持添加当日任务，可拖拽排序
+- **预估番茄数**：每个任务可设置预估所需番茄钟数
+- **任务标签**：为任务添加分类标签
+- **任务模板**：可将常用任务保存为模板，一键创建
+- **进度追踪**：实时显示每个任务已完成的番茄数
+
+#### 统计与成就系统
+- **当日统计**：专注分钟数、完成番茄数、任务完成率、连续专注天数
+- **累计统计**：总专注分钟数、总番茄数、最长连续天数、当前连续天数
+- **周/月统计图表**：可视化展示近7天和本月的专注分布
+- **标签分布**：按标签统计各分类的专注时长占比
+- **13项成就**：包含番茄数、专注时长、连续天数、每日任务等维度的成就解锁
+  - 初试锋芒、笃行不怠、锲而不舍、金石可镂、磨杵成针
+  - 七日一心、月月恒一、百日筑基
+  - 一日五熟、十日并出
+  - 功课圆满、课业精进
+
+#### 番茄钟界面
+- [PomodoroView](file:///D:/QiyunGe/src/main/java/com/qiyunge/ui/pomodoro/PomodoroView.java) — 主界面：圆形倒计时环、任务列表、控制按钮
+- [PomodoroStatsView](file:///D:/QiyunGe/src/main/java/com/qiyunge/ui/pomodoro/PomodoroStatsView.java) — 统计面板：当日/累计数据、周/月图表、成就展示
+- [PomodoroSettingsDialog](file:///D:/QiyunGe/src/main/java/com/qiyunge/ui/pomodoro/PomodoroSettingsDialog.java) — 设置对话框
+- [PomodoroTaskDialog](file:///D:/QiyunGe/src/main/java/com/qiyunge/ui/pomodoro/PomodoroTaskDialog.java) — 任务/模板编辑对话框
+- [PomodoroViewModel](file:///D:/QiyunGe/src/main/java/com/qiyunge/ui/pomodoro/PomodoroViewModel.java) — 视图模型
+
+### 🗄️ 数据库迁移
+
+| 版本 | 说明 |
+|------|------|
+| **V9** | 扩展 `pomodoro_sessions` 表（新增任务关联、时间戳、完成状态、标签）；新增 `pomodoro_tasks`（任务表）和 `pomodoro_task_templates`（任务模板表）；新增相关索引 |
+
+### 🎨 界面与体验优化
+
+- **闲云馆**：[EntertainmentView](file:///D:/QiyunGe/src/main/java/com/qiyunge/ui/entertainment/EntertainmentView.java) 扩展，新增番茄钟入口
+- **听雨轩**：[MusicView](file:///D:/QiyunGe/src/main/java/com/qiyunge/ui/music/MusicView.java) 交互细节优化
+- **拾光廊**：[GalleryView](file:///D:/QiyunGe/src/main/java/com/qiyunge/ui/gallery/GalleryView.java) 细节改进
+- **主壳**：[MainShell](file:///D:/QiyunGe/src/main/java/com/qiyunge/ui/shell/MainShell.java) 页面注册扩展
+- **图标更新**：全新设计的 [icon.ico](file:///D:/QiyunGe/src/main/resources/images/icon.ico) 和 [icon.png](file:///D:/QiyunGe/src/main/resources/images/icon.png)
+- **样式扩展**：[components.css](file:///D:/QiyunGe/src/main/resources/styles/components.css) 新增番茄钟相关样式（圆形进度环、任务卡片、统计面板等）
+
+### 🔧 底层改进
+
+- **应用上下文**：[AppContext](file:///D:/QiyunGe/src/main/java/com/qiyunge/app/AppContext.java) 新增番茄钟相关服务和仓储注册
+- **单元测试**：新增 [PomodoroServiceTest](file:///D:/QiyunGe/src/main/java/com/qiyunge/test/PomodoroServiceTest.java)
+- **开发脚本**：新增 `scripts/` 目录，包含图标格式转换工具
+
+---
+
 ## [v1.1.0] - 2026-07-17
 
 ### ✨ 新增功能

@@ -287,10 +287,10 @@ public class MainShell extends BorderPane {
         navigationService.registerPage(NavigationService.Page.DASHBOARD, () -> wrapPage(new DashboardView(appContext)));
         navigationService.registerPage(NavigationService.Page.MUSIC, () -> {
             MusicView mv = new MusicView(appContext, musicBar);
-            return wrapPage(mv);
+            return mv;
         });
-        navigationService.registerPage(NavigationService.Page.GALLERY, () -> wrapPage(new GalleryView(appContext)));
-        navigationService.registerPage(NavigationService.Page.ENTERTAINMENT, () -> wrapPage(new EntertainmentView(appContext)));
+        navigationService.registerPage(NavigationService.Page.GALLERY, () -> new GalleryView(appContext));
+        navigationService.registerPage(NavigationService.Page.ENTERTAINMENT, () -> new EntertainmentView(appContext));
         navigationService.registerPage(NavigationService.Page.PROFILE, () -> {
             ProfileView pv = new ProfileView(appContext);
             pv.setOnAccountDeleted(() -> {

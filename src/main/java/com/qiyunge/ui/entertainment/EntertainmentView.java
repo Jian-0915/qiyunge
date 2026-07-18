@@ -3,9 +3,12 @@ package com.qiyunge.ui.entertainment;
 import com.qiyunge.app.AppContext;
 import com.qiyunge.application.service.EntertainmentService;
 import com.qiyunge.domain.entity.GameRecord;
+import com.qiyunge.ui.pomodoro.PomodoroStatsView;
+import com.qiyunge.ui.pomodoro.PomodoroView;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Separator;
 import javafx.scene.layout.*;
 
@@ -17,7 +20,9 @@ public class EntertainmentView extends BorderPane {
 
     private final AppContext appContext;
     private final VBox contentArea;
+    private final ScrollPane contentScrollPane;
     private Object currentGameView = null;
+    private Object currentPomodoroView = null;
 
     public EntertainmentView(AppContext appContext) {
         this.appContext = appContext;
@@ -32,12 +37,20 @@ public class EntertainmentView extends BorderPane {
         setLeft(sidebar);
 
         // ===== Center: 主内容区 =====
-        // 不内嵌 ScrollPane，由 MainShell 的 wrapPage ScrollPane 统一处理滚动
         contentArea = new VBox(8);
         contentArea.setPadding(new Insets(24));
         contentArea.setStyle("-fx-background-color: -bg-primary;");
         VBox.setVgrow(contentArea, Priority.ALWAYS);
-        setCenter(contentArea);
+
+        contentScrollPane = new ScrollPane(contentArea);
+        contentScrollPane.setFitToWidth(true);
+        contentScrollPane.setFitToHeight(true);
+        contentScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        contentScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        contentScrollPane.setPadding(new Insets(0, 0, 12, 0));
+        contentScrollPane.setStyle("-fx-background-color: transparent; -fx-background: transparent;");
+        contentScrollPane.getStyleClass().add("page-scroll");
+        setCenter(contentScrollPane);
 
         // 默认显示游乐场
         navigateTo("games");
@@ -51,6 +64,10 @@ public class EntertainmentView extends BorderPane {
             case "games" -> showGamesPage();
             case "guessNumber" -> showGuessNumberPage();
             case "memoryFlip" -> showMemoryFlipPage();
+            case "pomodoro" -> showPomodoroPage();
+            case "pomodoro-weekly" -> showPomodoroStatsPage("weekly");
+            case "pomodoro-monthly" -> showPomodoroStatsPage("monthly");
+            case "pomodoro-overview" -> showPomodoroStatsPage("overview");
             case "tools" -> showToolsPage();
             case "records" -> showRecordsPage();
             default -> showGamesPage();
@@ -254,11 +271,11 @@ public class EntertainmentView extends BorderPane {
         toolGrid.getColumnConstraints().addAll(c1, c2, c3);
 
         toolGrid.add(createToolCard("☯", "求签", "摇一摇，看看今天的运势",
-                "-warning-light", "-warning", "敬请期待"), 0, 0);
+                "-warning-light", "-warning", "敬请期待", null), 0, 0);
         toolGrid.add(createToolCard("☯", "问卜", "抛个卦，探一探前路方向",
-                "-accent-light", "-accent", "敬请期待"), 1, 0);
+                "-accent-light", "-accent", "敬请期待", null), 1, 0);
         toolGrid.add(createToolCard("⏱", "专注计时", "设定时间，沉浸当下",
-                "-primary-light", "-primary", "敬请期待"), 2, 0);
+                "-primary-light", "-primary", "进入", "pomodoro"), 2, 0);
 
         contentArea.getChildren().add(toolGrid);
 
@@ -295,7 +312,7 @@ public class EntertainmentView extends BorderPane {
     }
 
     private VBox createToolCard(String icon, String name, String desc,
-                                String iconBgColor, String iconColor, String footerText) {
+                                String iconBgColor, String iconColor, String footerText, String navKey) {
         VBox card = new VBox(14);
         card.setPadding(new Insets(24));
         card.setStyle("-fx-background-color: -bg-card; -fx-background-radius: 16; " +
@@ -310,6 +327,10 @@ public class EntertainmentView extends BorderPane {
                 "-fx-cursor: hand; -fx-translate-y: -2;";
         card.setOnMouseEntered(e -> card.setStyle(hoverStyle));
         card.setOnMouseExited(e -> card.setStyle(baseStyle));
+
+        if (navKey != null) {
+            card.setOnMouseClicked(e -> navigateTo(navKey));
+        }
 
         // 图标容器 (44x44)
         StackPane iconWrapper = new StackPane();
@@ -385,6 +406,40 @@ public class EntertainmentView extends BorderPane {
             mfv.cleanup();
         }
         currentGameView = null;
+    }
+
+    private void cleanupCurrentPomodoro() {
+        if (currentPomodoroView instanceof PomodoroView pv) {
+            pv.cleanup();
+        } else if (currentPomodoroView instanceof PomodoroStatsView psv) {
+            psv.cleanup();
+        }
+        currentPomodoroView = null;
+    }
+
+    // ========== 专注计时主页面 ==========
+    private void showPomodoroPage() {
+        cleanupCurrentGame();
+        cleanupCurrentPomodoro();
+        contentArea.getChildren().clear();
+        PomodoroView pomodoroView = new PomodoroView(appContext,
+            () -> navigateTo("pomodoro"),
+            this::showPomodoroStatsPage);
+        VBox.setVgrow(pomodoroView, Priority.ALWAYS);
+        contentArea.getChildren().add(pomodoroView);
+        currentPomodoroView = pomodoroView;
+    }
+
+    private void showPomodoroStatsPage(String tab) {
+        cleanupCurrentGame();
+        cleanupCurrentPomodoro();
+        contentArea.getChildren().clear();
+        PomodoroStatsView statsView = new PomodoroStatsView(appContext, tab,
+            () -> navigateTo("pomodoro"),
+            this::showPomodoroStatsPage);
+        VBox.setVgrow(statsView, Priority.ALWAYS);
+        contentArea.getChildren().add(statsView);
+        currentPomodoroView = statsView;
     }
 
 

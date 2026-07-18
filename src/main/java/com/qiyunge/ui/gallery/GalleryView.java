@@ -42,6 +42,7 @@ public class GalleryView extends BorderPane {
     private final AppContext appContext;
     private final GalleryViewModel viewModel;
     private final VBox contentArea;
+    private final ScrollPane contentScrollPane;
     // 页面缓存：避免切换导航时重建页面丢失内容
     private final java.util.Map<String, javafx.scene.Node> pageCache = new java.util.HashMap<>();
 
@@ -75,12 +76,19 @@ public class GalleryView extends BorderPane {
         setLeft(sidebar);
 
         // ===== Center: 主内容区 =====
-        // 不内嵌 ScrollPane，由 MainShell 的 wrapPage ScrollPane 统一处理滚动
         contentArea = new VBox(8);
         contentArea.setPadding(new Insets(16));
         contentArea.setStyle("-fx-background-color: -bg-primary;");
         VBox.setVgrow(contentArea, Priority.ALWAYS);
-        setCenter(contentArea);
+
+        contentScrollPane = new ScrollPane(contentArea);
+        contentScrollPane.setFitToWidth(true);
+        contentScrollPane.setFitToHeight(true);
+        contentScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        contentScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        contentScrollPane.setStyle("-fx-background-color: transparent; -fx-background: transparent;");
+        contentScrollPane.getStyleClass().add("page-scroll");
+        setCenter(contentScrollPane);
 
         // 默认显示光影墙
         navigateTo("allImages");
